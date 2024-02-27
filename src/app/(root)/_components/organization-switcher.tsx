@@ -26,7 +26,7 @@ const OrganizationSwitcher = ({ className = "" }: Props) => {
   const closeShowNewTeamDialog = () => setShowNewTeamDialog(false);
   const [selectedOrganization, setSelectedOrganization] = useState<Organization | undefined>(undefined);
   const [organizations, setOrganizations] = useState<Organization[] | []>([]);
-  const { data = [], isLoading } = api.organization.getAllUserOrgById.useQuery({});
+  const { data = [], isLoading } = api.organization.getAllUserOrgById.useQuery();
 
   useEffect(() => {
     if (!isLoading) {
