@@ -5,14 +5,15 @@ import TopNav from "./_components/top-nav";
 type Props = { children: React.ReactNode };
 
 const Layout = async ({ children }: Props) => {
-  // const session = await getServerAuthSession();
-  // if (!session?.user.id) redirect("/");
+  const session = await getServerAuthSession();
+  if (!session?.user.id) redirect("/");
+
   return (
-    <div className="h-full flex flex-col w-full">
+    <div className="flex h-full w-full flex-col">
       <TopNav />
-      <div className="flex-1 h-full mt-4">{children}</div>
+      <div className="mt-4 h-full flex-1">{children}</div>
     </div>
   );
-}
+};
 
 export default Layout;
