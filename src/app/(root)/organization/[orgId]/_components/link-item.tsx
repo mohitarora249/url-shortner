@@ -9,12 +9,12 @@ const LinkItem = ({ shortLink, id, link }: Links) => {
   const url = `${env.NEXT_PUBLIC_BASE_URL}/${shortLink}`;
   const onExternalLinkClickHandler = () => window.open(url);
   const { links } = api.useUtils();
-  const { mutate, } = api.links.deleteById.useMutation({
+  const { mutate } = api.links.deleteById.useMutation({
     onSuccess: () => {
       toast("Link deleted");
       links.invalidate();
     },
-    onError: () => toast("Error occurred while deleting link")
+    onError: () => toast("Error occurred while deleting link"),
   });
 
   const deleteLinkHandler = () => {
@@ -22,13 +22,16 @@ const LinkItem = ({ shortLink, id, link }: Links) => {
   };
 
   return (
-    <div key={id} className="flex w-full flex-col hover:bg-gray-50 pl-2 rounded-md cursor-pointer">
+    <div
+      key={id}
+      className="flex w-full cursor-pointer flex-col rounded-md pl-2 hover:bg-gray-50"
+    >
       <div className="flex items-center">
-        <div className="flex flex-col">
+        <div className="flex w-full flex-col">
           <div className="font-bold">{url}</div>
-          <div className='text-sm'>{link}</div>
+          <div className="text-sm">{link}</div>
         </div>
-        <div className='space-x-2 flex justify-end w-full'>
+        <div className="flex w-full justify-end space-x-2">
           <Button onClick={deleteLinkHandler} variant="ghost">
             <Trash2 className="h-4 w-4" />
           </Button>
@@ -38,7 +41,7 @@ const LinkItem = ({ shortLink, id, link }: Links) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default LinkItem;
