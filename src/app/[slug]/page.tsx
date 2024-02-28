@@ -2,7 +2,7 @@ import Redis from "ioredis";
 import { redirect } from "next/navigation";
 import { env } from "~/env";
 import { db } from "~/server/db";
-import { Links } from "@prisma/";
+import { Links } from "@prisma/client";
 
 type Props = {
   params: { slug: string },
