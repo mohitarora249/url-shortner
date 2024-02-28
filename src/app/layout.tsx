@@ -35,7 +35,7 @@ export default function RootLayout({
         <Providers session={session}>
           <TRPCReactProvider>
             <main className="h-screen w-screen flex flex-col">
-              {!session && <TopNav />}
+              {!session?.user.id && <TopNav />}
               <div className="flex-1">{children}</div>
             </main>
           </TRPCReactProvider>
