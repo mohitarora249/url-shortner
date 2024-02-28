@@ -5,8 +5,13 @@ import { usePathname } from "next/navigation";
 import { cn } from "~/lib/utils"
 import { Button } from "~/components/ui/button";
 import GoogleLogin from "~/components/google-login";
+import { useSession } from "next-auth/react";
 
 const TopNav = () => {
+  const session = useSession();
+  
+  if (session.data?.user.id) return null;
+
   return (
     <div className="hidden flex-col md:flex">
       <div className="border-b">
