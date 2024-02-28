@@ -6,6 +6,7 @@ import { TRPCReactProvider } from "~/trpc/react";
 import { Session } from "next-auth";
 import Providers from "./providers";
 import TopNav from "./_components/top-nav";
+import { redirect } from "next/navigation";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -25,13 +26,16 @@ export default function RootLayout({
   children: React.ReactNode;
   params: { session: Session | null };
 }) {
+
+  if (session?.user.id) redirect("/dashboard");
+
   return (
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
         <Providers session={session}>
           <TRPCReactProvider>
             <main className="h-screen w-screen flex flex-col">
-              <TopNav />
+              {!session && <TopNav />}
               <div className="flex-1">{children}</div>
             </main>
           </TRPCReactProvider>

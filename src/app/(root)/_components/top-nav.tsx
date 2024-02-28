@@ -12,10 +12,12 @@ const TopNav = () => {
     <div className="hidden flex-col md:flex">
       <div className="border-b">
         <div className="flex h-16 items-center px-4 max-w-full mx-4 md:max-w-screen-lg md:mx-auto">
-          <div className="text-lg font-extrabold tracking-wide">
-            <span>Link</span>
-            <span className="text-blue-500">Lift</span>
-          </div>
+          <Link href="/dashboard" className="cursor-pointer">
+            <div className="text-lg font-extrabold tracking-wide">
+              <span>Link</span>
+              <span className="text-blue-500">Lift</span>
+            </div>
+          </Link>
           {!pathname.includes("dashboard") && <OrganizationSwitcher />}
           <MainNav className="mx-6" />
           <div className="ml-auto flex items-center space-x-4">
