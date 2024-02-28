@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import { TRPCReactProvider } from "~/trpc/react";
 import { Session } from "next-auth";
 import Providers from "./providers";
+import TopNav from "./_components/top-nav";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -29,8 +30,9 @@ export default function RootLayout({
       <body className={`font-sans ${inter.variable}`}>
         <Providers session={session}>
           <TRPCReactProvider>
-            <main className="h-screen w-screen">
-              {children}
+            <main className="h-screen w-screen flex flex-col">
+              <TopNav />
+              <div className="flex-1">{children}</div>
             </main>
           </TRPCReactProvider>
         </Providers>

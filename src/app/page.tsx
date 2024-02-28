@@ -8,9 +8,9 @@ const Home = async () => {
   if (session?.user.id) redirect("/dashboard");
 
   return (
-    <div className="mx-4 flex h-screen max-w-full flex-col items-center justify-center md:mx-auto md:max-w-screen-lg">
+    <div className="mx-4 flex h-full max-w-full flex-col items-center justify-center md:mx-auto md:max-w-screen-lg">
       <TypewriterEffect
-        className="space-y-8	tracking-wider"
+        className="space-y-8 tracking-wider"
         words={[
           { text: "Start", className: "text-xl md:text-[5rem]" },
           {
@@ -18,7 +18,7 @@ const Home = async () => {
             className: "text-xl md:text-[5rem] text-blue-500",
           },
           { text: "links", className: "text-xl md:text-[5rem] text-blue-500" },
-          { text: "with", className: "text-xl md:text-[5rem]" },
+          { text: "in", className: "text-xl md:text-[5rem]" },
           { text: "one", className: "text-xl md:text-[5rem]" },
           { text: "simple", className: "text-xl md:text-[5rem]" },
           { text: "click", className: "text-xl md:text-[5rem]" },

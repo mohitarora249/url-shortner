@@ -1,25 +1,19 @@
 "use client";
 
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { cn } from "~/lib/utils"
-import OrganizationSwitcher from "./organization-switcher"
-import UserNav from "./user-nav"
+import { Button } from "~/components/ui/button";
+import GoogleLogin from "~/components/google-login";
 
 const TopNav = () => {
-  const pathname = usePathname();
   return (
     <div className="hidden flex-col md:flex">
       <div className="border-b">
         <div className="flex h-16 items-center px-4 max-w-full mx-4 md:max-w-screen-lg md:mx-auto">
-          <div className="text-lg font-extrabold tracking-wide">
-            <span>Link</span>
-            <span className="text-blue-500">Lift</span>
-          </div>
-          {!pathname.includes("dashboard") && <OrganizationSwitcher />}
           <MainNav className="mx-6" />
           <div className="ml-auto flex items-center space-x-4">
-            <UserNav />
+            <GoogleLogin showLogo={false} text="Login"/>
           </div>
         </div>
       </div>
@@ -36,12 +30,10 @@ function MainNav({
       className={cn("flex items-center space-x-4 lg:space-x-6", className)}
       {...props}
     >
-      <Link
-        href="/dashboard"
-        className="text-sm font-medium transition-colors hover:text-primary"
-      >
-        Dashboard
-      </Link>
+      <div className="text-lg font-extrabold tracking-wide">
+            <span>Link</span>
+            <span className="text-blue-500">Lift</span>
+          </div>
     </nav>
   )
 }

@@ -2,14 +2,19 @@
 import { signIn } from "next-auth/react";
 import { Button } from "~/components/ui/button";
 
-const GoogleLogin = () => {
+type Props = {
+  text?: string;
+  showLogo?: boolean
+}
+
+const GoogleLogin = ({ text = "Continue with Google", showLogo = true }: Props) => {
   const signInWithGoogle = async () => {
     await signIn();
   };
 
   return (
     <Button onClick={signInWithGoogle} disabled={false}>
-      <span className="mr-4 h-4 w-4">
+      {showLogo && <span className="mr-4 h-4 w-4">
         <svg
           version="1.1"
           xmlns="http://www.w3.org/2000/svg"
@@ -33,8 +38,8 @@ const GoogleLogin = () => {
           ></path>
           <path fill="none" d="M0 0h48v48H0z"></path>
         </svg>
-      </span>
-      <span>Continue with Google</span>
+      </span>}
+      <span>{text}</span>
     </Button>
   );
 };
