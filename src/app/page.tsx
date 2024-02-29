@@ -8,20 +8,20 @@ const Home = async () => {
   if (session?.user.id) redirect("/dashboard");
 
   return (
-    <div className="mx-4 flex h-full max-w-full flex-col items-center justify-center md:mx-auto md:max-w-screen-lg">
+    <div className="mx-4 flex h-full max-w-full flex-col items-center mt-14 md:mt-0 md:justify-center md:mx-auto md:max-w-screen-lg">
       <TypewriterEffect
-        className="space-y-8 tracking-wider"
+        className="space-y-3 md:space-y-8 tracking-wider"
         words={[
-          { text: "Start", className: "text-xl md:text-[5rem]" },
+          { text: "Start", className: "text-3xl md:text-[5rem]" },
           {
             text: "shortening",
-            className: "text-xl md:text-[5rem] text-blue-500",
+            className: "text-3xl md:text-[5rem] text-blue-500",
           },
-          { text: "links", className: "text-xl md:text-[5rem] text-blue-500" },
-          { text: "in", className: "text-xl md:text-[5rem]" },
-          { text: "one", className: "text-xl md:text-[5rem]" },
-          { text: "simple", className: "text-xl md:text-[5rem]" },
-          { text: "click", className: "text-xl md:text-[5rem]" },
+          { text: "links", className: "text-3xl md:text-[5rem] text-blue-500" },
+          { text: "in", className: "text-3xl md:text-[5rem]" },
+          { text: "one", className: "text-3xl md:text-[5rem]" },
+          { text: "simple", className: "text-3xl md:text-[5rem]" },
+          { text: "click", className: "text-3xl md:text-[5rem]" },
         ]}
       />
       <ActionBar />

@@ -13,10 +13,10 @@ const TopNav = () => {
   if (session.data?.user.id) return null;
 
   return (
-    <div className="hidden flex-col md:flex">
+    <div className="flex flex-col">
       <div className="border-b">
         <div className="flex h-16 items-center px-4 max-w-full mx-4 md:max-w-screen-lg md:mx-auto">
-          <MainNav className="mx-6" />
+          <MainNav className="mx-0 md:mx-6" />
           <div className="ml-auto flex items-center space-x-4">
             <GoogleLogin showLogo={false} text="Login" />
           </div>
