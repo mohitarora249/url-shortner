@@ -22,12 +22,13 @@ const useCreateLink = ({ orgId }: { orgId: string }) => {
     resolver: zodResolver(CreateShortenLink),
     defaultValues: {
       link: "",
-      orgId: ""
+      orgId: "",
+      expiration: "NO_EXP"
     },
   });
 
   const onSubmit = (values: z.infer<typeof CreateShortenLink>) => {
-    mutate({ link: values.link, orgId });
+    mutate({ link: values.link, orgId, expiration: values.expiration });
   }
 
   return {

@@ -44,18 +44,13 @@ export const linksRouter = createTRPCRouter({
   create: protectedProcedure
     .input(CreateShortenLink)
     .mutation(async ({ ctx, input }) => {
-      // const orgInfo = await ctx.db.organization.findFirst({
-      //     where: {
-      //     id: input.orgId
-      //   }
-      // });
-      // const baseURL = orgInfo?.host ?? env.BASE_URL;
-      // const shortLink = `${baseURL}/${nanoid(6)}`;
+      // TODO: calculate expiration
       return ctx.db.links.create({
         data: {
           organizationId: input.orgId,
           link: input.link,
-          shortLink: nanoid(6)
+          shortLink: nanoid(6),
+          // expiration: input.expiration
         },
       });
     }),

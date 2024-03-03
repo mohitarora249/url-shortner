@@ -2,10 +2,11 @@
 
 import { useParams } from 'next/navigation';
 import { Button } from '~/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '~/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormMessage } from '~/components/ui/form';
 import { Input } from '~/components/ui/input'
 import useCreateLink from '~/hooks/use-create-link';
 import { Loader2 } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select';
 
 const CreateLinkForm = () => {
   const params = useParams();
@@ -25,6 +26,28 @@ const CreateLinkForm = () => {
                   <Input placeholder="Enter link here" {...field} />
                 </FormControl>
                 <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="expiration"
+            render={({ field }) => (
+              <FormItem>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger className="min-w-max">
+                      <SelectValue placeholder="No Expiration" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="5_MIN">5 minutes</SelectItem>
+                    <SelectItem value="15_MIN">15 minutes</SelectItem>
+                    <SelectItem value="1_HR">1 hour</SelectItem>
+                    <SelectItem value="24_HR">24 hours</SelectItem>
+                    <SelectItem value="NO_EXP">No Expiration</SelectItem>
+                  </SelectContent>
+                </Select>
               </FormItem>
             )}
           />
