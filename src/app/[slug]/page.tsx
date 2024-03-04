@@ -1,15 +1,13 @@
-import Redis from "ioredis";
 import { redirect } from "next/navigation";
-import { env } from "~/env";
 import { db } from "~/server/db";
 import { Links } from "@prisma/client";
+import redis from "~/server/redis";
 
 type Props = {
   params: { slug: string },
   searchParams: { [key: string]: string | string[] | undefined }
 }
 
-const redis = new Redis(env.REDIS);
 
 const RedirectionPage = async ({ params }: Props) => {
   const res = await redis.get(params.slug);

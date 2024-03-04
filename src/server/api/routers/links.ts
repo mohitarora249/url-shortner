@@ -1,4 +1,3 @@
-import { env } from "~/env";
 import { MandatoryIDSchema } from "~/schemas/common";
 import { CreateShortenLink, ShortenLinkSchema } from "~/schemas/links";
 import { OrgIDSchema } from "~/schemas/organization";
