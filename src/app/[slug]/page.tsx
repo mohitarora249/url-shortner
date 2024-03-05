@@ -12,9 +12,9 @@ type Props = {
 const RedirectionPage = async ({ params }: Props) => {
   const res = await redis.get(params.slug);
   let data: Links | null = null;
-  if (res) {
-    data = JSON.parse(res) as Links;
-  } else {
+
+  if (res) data = res as Links;
+  else {
     data = await db.links.findFirst({
       where: {
         shortLink: params.slug,
