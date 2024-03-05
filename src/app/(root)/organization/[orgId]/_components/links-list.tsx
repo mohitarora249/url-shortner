@@ -13,6 +13,8 @@ const LinksList = () => {
       { enabled: !!orgId },
     );
 
+  console.log("datadata :", data);
+
   return (
     <div className="h-full">
       {isFetching && !isFetched && <div>Fetching data</div>}

@@ -15,7 +15,8 @@ const inter = Inter({
 
 export const metadata = {
   title: "Maximize Clicks: Shorten URLs with Ease!",
-  description: "Experience the ultimate solution to lengthy URLs! Our cutting-edge URL shortener streamlines your links, enhancing accessibility and boosting click-through rates. Say goodbye to cumbersome addresses and hello to concise, shareable links. Start optimizing your online presence today!",
+  description:
+    "Experience the ultimate solution to lengthy URLs! Our cutting-edge URL shortener streamlines your links, enhancing accessibility and boosting click-through rates. Say goodbye to cumbersome addresses and hello to concise, shareable links. Start optimizing your online presence today!",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
@@ -26,7 +27,6 @@ export default function RootLayout({
   children: React.ReactNode;
   params: { session: Session | null };
 }) {
-
   if (session?.user.id) redirect("/dashboard");
 
   return (
@@ -34,8 +34,8 @@ export default function RootLayout({
       <body className={`font-sans ${inter.variable}`}>
         <Providers session={session}>
           <TRPCReactProvider>
-            <main className="h-screen w-screen flex flex-col">
-              <TopNav />
+            <main className="flex h-screen w-screen flex-col">
+              {!session?.user.id && <TopNav />}
               <div className="flex-1">{children}</div>
             </main>
           </TRPCReactProvider>
