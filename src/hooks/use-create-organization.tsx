@@ -7,7 +7,11 @@ import { z } from "zod"
 import { CreateOrgSchema } from "~/schemas/organization";
 import { api } from "~/trpc/react";
 
-const useCreateOrganization = () => {
+type Args = {
+  callback?: () => void;
+}
+
+const useCreateOrganization = ({ callback }: Args) => {
   const { mutate, isLoading, isError, isSuccess } = api.organization.create.useMutation({
     onSuccess: (data) => toast(`${data.name} Organization created`),
     onError: (err) => toast(err.message)
@@ -23,6 +27,8 @@ const useCreateOrganization = () => {
 
   const onSubmit = (values: z.infer<typeof CreateOrgSchema>) => {
     mutate({ name: values.name, host: values.host });
+    form.reset();
+    if (callback) callback();
   }
 
   return {
