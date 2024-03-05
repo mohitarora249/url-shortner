@@ -4,6 +4,8 @@ import { OrgIDSchema } from "~/schemas/organization";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { nanoid } from "nanoid";
 import { calculateExpirationTime } from "~/server/utils";
+import ratelimit from "~/server/rate-limiter";
+import { TRPCError } from "@trpc/server";
 
 export const linksRouter = createTRPCRouter({
   getById: protectedProcedure
@@ -42,6 +44,10 @@ export const linksRouter = createTRPCRouter({
   create: protectedProcedure
     .input(CreateShortenLink)
     .mutation(async ({ ctx, input }) => {
+      const { success } = await ratelimit.limit(ctx.session.user.id);
+      if (!success) {
+        throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
+      }
       return ctx.db.links.create({
         data: {
           organizationId: input.orgId,
