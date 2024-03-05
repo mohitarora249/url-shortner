@@ -26,7 +26,9 @@ export const linksRouter = createTRPCRouter({
         },
         select: {
           link: true,
-          isExpired: true,
+          expirationTime: {
+            lt: new Date(),
+          },
           isDeleted: true,
         }
       })
@@ -38,8 +40,10 @@ export const linksRouter = createTRPCRouter({
         where: {
           organizationId: input.orgId,
           isDeleted: false,
-          isExpired: false,
-        }})
+          expirationTime: {
+            lt: new Date(),
+          }
+      })
     }),
   create: protectedProcedure
     .input(CreateShortenLink)
@@ -59,7 +63,7 @@ export const linksRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.links.update({
         where: { id: input.id },
-        data: { isExpired: true }
+        data: { expirationTime: new Date() }
       });
     }),
   deleteById: protectedProcedure

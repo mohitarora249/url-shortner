@@ -27,7 +27,8 @@ const RedirectionPage = async ({ params }: Props) => {
 
   if (data && data.link) redirect(data.link);
   if (!data) return <div className="h-screen">Link Not Found</div>;
-  if (data && data.isExpired) return <div className="h-screen">Link Expired</div>;
+  // TODO: fix this
+  if (data && data.expirationTime) return <div className="h-screen">Link Expired</div>;
   if (data && data.isDeleted) return <div className="h-screen">Link Deleted</div>;
   return <div className="h-screen" />;
 }
