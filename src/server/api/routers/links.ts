@@ -1,12 +1,9 @@
-import { env } from "~/env";
 import { MandatoryIDSchema } from "~/schemas/common";
 import { CreateShortenLink, ShortenLinkSchema } from "~/schemas/links";
 import { OrgIDSchema } from "~/schemas/organization";
-import {
-  createTRPCRouter,
-  protectedProcedure,
-} from "~/server/api/trpc";
-import { nanoid } from 'nanoid'
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import { nanoid } from "nanoid";
+import { calculateExpirationTime } from "~/server/utils";
 
 export const linksRouter = createTRPCRouter({
   getById: protectedProcedure
@@ -14,24 +11,23 @@ export const linksRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.links.findFirst({
         where: {
-          id: input.id
-        }})
+          id: input.id,
+        },
+      });
     }),
   getByShortLink: protectedProcedure
     .input(ShortenLinkSchema)
     .query(({ ctx, input }) => {
       return ctx.db.links.findFirst({
         where: {
-          shortLink: input.shortLink
+          shortLink: input.shortLink,
         },
         select: {
           link: true,
-          expirationTime: {
-            lt: new Date(),
-          },
+          expirationTime: true,
           isDeleted: true,
-        }
-      })
+        },
+      });
     }),
   getAllAvailableLinksByOrgId: protectedProcedure
     .input(OrgIDSchema)
@@ -40,21 +36,18 @@ export const linksRouter = createTRPCRouter({
         where: {
           organizationId: input.orgId,
           isDeleted: false,
-          expirationTime: {
-            lt: new Date(),
-          }
-      })
+        },
+      });
     }),
   create: protectedProcedure
     .input(CreateShortenLink)
     .mutation(async ({ ctx, input }) => {
-      // TODO: calculate expiration
       return ctx.db.links.create({
         data: {
           organizationId: input.orgId,
           link: input.link,
           shortLink: nanoid(6),
-          // expiration: input.expiration
+          expirationTime: calculateExpirationTime(input.expiration),
         },
       });
     }),
@@ -63,7 +56,7 @@ export const linksRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.links.update({
         where: { id: input.id },
-        data: { expirationTime: new Date() }
+        data: { expirationTime: new Date() },
       });
     }),
   deleteById: protectedProcedure
@@ -71,7 +64,7 @@ export const linksRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.links.update({
         where: { id: input.id },
-        data: { isDeleted: true }
+        data: { isDeleted: true },
       });
     }),
 });

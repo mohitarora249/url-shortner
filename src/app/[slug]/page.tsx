@@ -3,11 +3,12 @@ import { redirect } from "next/navigation";
 import { env } from "~/env";
 import { db } from "~/server/db";
 import { Links } from "@prisma/client";
+import { isAfter } from "date-fns";
 
 type Props = {
-  params: { slug: string },
-  searchParams: { [key: string]: string | string[] | undefined }
-}
+  params: { slug: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
 
 const redis = new Redis(env.REDIS);
 
@@ -19,18 +20,27 @@ const RedirectionPage = async ({ params }: Props) => {
   } else {
     data = await db.links.findFirst({
       where: {
-        shortLink: params.slug
-      }
+        shortLink: params.slug,
+      },
     });
     await redis.set(params.slug, JSON.stringify(data));
   }
 
-  if (data && data.link) redirect(data.link);
   if (!data) return <div className="h-screen">Link Not Found</div>;
-  // TODO: fix this
-  if (data && data.expirationTime) return <div className="h-screen">Link Expired</div>;
-  if (data && data.isDeleted) return <div className="h-screen">Link Deleted</div>;
+
+  if (
+    data &&
+    data.expirationTime &&
+    isAfter(new Date(), new Date(data.expirationTime))
+  )
+    return <div className="h-screen">Link Expired</div>;
+
+  if (data && data.isDeleted)
+    return <div className="h-screen">Link Deleted</div>;
+
+  if (data && data.link) redirect(data.link);
+
   return <div className="h-screen" />;
-}
+};
 
 export default RedirectionPage;

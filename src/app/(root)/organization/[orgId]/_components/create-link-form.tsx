@@ -1,12 +1,24 @@
 "use client";
 
-import { useParams } from 'next/navigation';
-import { Button } from '~/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormMessage } from '~/components/ui/form';
-import { Input } from '~/components/ui/input'
-import useCreateLink from '~/hooks/use-create-link';
-import { Loader2 } from 'lucide-react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select';
+import { useParams } from "next/navigation";
+import { Button } from "~/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
+import useCreateLink from "~/hooks/use-create-link";
+import { Loader2 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
 
 const CreateLinkForm = () => {
   const params = useParams();
@@ -14,14 +26,17 @@ const CreateLinkForm = () => {
   const { form, onSubmit, isLoading } = useCreateLink({ orgId });
 
   return (
-    <div className='w-full '>
+    <div className="w-full ">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full flex space-x-4 mb-4">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="mb-4 flex w-full space-x-4"
+        >
           <FormField
             control={form.control}
             name="link"
             render={({ field }) => (
-              <FormItem className='w-full'>
+              <FormItem className="w-full">
                 <FormControl>
                   <Input placeholder="Enter link here" {...field} />
                 </FormControl>
@@ -34,7 +49,10 @@ const CreateLinkForm = () => {
             name="expiration"
             render={({ field }) => (
               <FormItem>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <FormControl>
                     <SelectTrigger className="min-w-max">
                       <SelectValue placeholder="No Expiration" />
@@ -58,7 +76,7 @@ const CreateLinkForm = () => {
         </form>
       </Form>
     </div>
-  )
-}
+  );
+};
 
 export default CreateLinkForm;
