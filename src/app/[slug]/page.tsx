@@ -1,23 +1,20 @@
-import Redis from "ioredis";
 import { redirect } from "next/navigation";
-import { env } from "~/env";
 import { db } from "~/server/db";
 import { Links } from "@prisma/client";
 import { isAfter } from "date-fns";
+import redis from "~/server/redis";
 
 type Props = {
   params: { slug: string };
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
-const redis = new Redis(env.REDIS);
-
 const RedirectionPage = async ({ params }: Props) => {
   const res = await redis.get(params.slug);
   let data: Links | null = null;
-  if (res) {
-    data = JSON.parse(res) as Links;
-  } else {
+
+  if (res) data = res as Links;
+  else {
     data = await db.links.findFirst({
       where: {
         shortLink: params.slug,

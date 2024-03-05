@@ -13,10 +13,14 @@ const useCreateLink = ({ orgId }: { orgId: string }) => {
     api.links.create.useMutation({
       onSuccess: () => {
         links.invalidate();
-        toast("Link Generated");
+        toast.success("Link Generated");
         form.reset();
       },
-      onError: (err) => toast(err.message),
+      onError: (err) => {
+        if (err.message === "TOO_MANY_REQUESTS")
+          toast.error("Too many requests. Try after 10 seconds");
+        else toast.error(err.message);
+      },
     });
 
   const form = useForm<z.infer<typeof CreateShortenLink>>({
