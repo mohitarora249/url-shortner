@@ -37,7 +37,7 @@ export const linksRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       let conditions = {};
       if (input.linkType === "active") {
-        conditions = { OR: [{ expirationTime: { gt: new Date() } }, { expirationTime: null }], isDeleted: false };
+        conditions = { AND: [{OR: [{ expirationTime: { gt: new Date() } }, { expirationTime: null }]}, {isDeleted: false} ]};
       } else if (input.linkType === "expired") {
         conditions = { AND: [{ lt: new Date() }, { isDeleted: false }] };
       } else if (input.linkType === "deleted") {
@@ -47,8 +47,7 @@ export const linksRouter = createTRPCRouter({
         skip: LINKS_PER_PAGE * (input.page ?? 1),
         take: LINKS_PER_PAGE,
         where: {
-          organizationId: input.orgId,        
-          ...conditions,
+          AND: [{ organizationId: input.orgId},  { ...conditions }]
         },
       });
     }),
