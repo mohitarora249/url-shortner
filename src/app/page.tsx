@@ -26,7 +26,6 @@ const Home = async () => {
         ]}
       />
       <ActionBar />
-      <CreateLinkForm />
     </div>
   );
 };
