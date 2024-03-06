@@ -1,6 +1,6 @@
 import CreateLinkForm from "./_components/create-link-form";
 import LinksList from "./_components/links-list";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 
 const Organization = () => {
   return (
