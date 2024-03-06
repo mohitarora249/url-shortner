@@ -4,17 +4,20 @@ import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { env } from "~/env";
 import { api } from "~/trpc/react";
+import { LinkType } from "~/types";
 
-const LinkItem = ({ shortLink, id, link }: Links) => {
+type Props = Links & { linkType: LinkType };
+
+const LinkItem = ({ shortLink, id, link, linkType }: Props) => {
   const url = `${env.NEXT_PUBLIC_BASE_URL}/${shortLink}`;
   const onExternalLinkClickHandler = () => window.open(url);
   const { links } = api.useUtils();
   const { mutate } = api.links.deleteById.useMutation({
     onSuccess: () => {
-      toast("Link deleted");
+      toast.success("Link deleted");
       links.invalidate();
     },
-    onError: () => toast("Error occurred while deleting link"),
+    onError: () => toast.error("Error occurred while deleting link"),
   });
 
   const deleteLinkHandler = () => {
@@ -32,12 +35,12 @@ const LinkItem = ({ shortLink, id, link }: Links) => {
           <div className="text-sm">{link}</div>
         </div>
         <div className="flex w-full justify-end space-x-2">
-          <Button onClick={deleteLinkHandler} variant="ghost">
+          {linkType !== "deleted" && <Button onClick={deleteLinkHandler} variant="ghost">
             <Trash2 className="h-4 w-4" />
-          </Button>
-          <Button onClick={onExternalLinkClickHandler} variant="ghost">
+          </Button>}
+          {linkType === "active" && <Button onClick={onExternalLinkClickHandler} variant="ghost">
             <ExternalLink className="h-4 w-4" />
-          </Button>
+          </Button>}
         </div>
       </div>
     </div>
