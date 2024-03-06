@@ -2,6 +2,7 @@ import { Links } from "@prisma/client";
 import { ExternalLink, Trash2, Ban } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
 import { env } from "~/env";
 import { api } from "~/trpc/react";
 import { LinkType } from "~/types";
@@ -42,15 +43,39 @@ const LinkItem = ({ shortLink, id, link, linkType }: Props) => {
           <div className="text-sm">{link}</div>
         </div>
         <div className="flex w-full justify-end space-x-2">
-          {linkType !== "deleted" && <Button onClick={deleteLinkHandler} variant="ghost">
-            <Trash2 className="h-4 w-4" />
-          </Button>}
+          {linkType !== "deleted" &&
+            <Tooltip>
+              <TooltipTrigger>
+                <Button onClick={deleteLinkHandler} variant="ghost">
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Delete link</p>
+              </TooltipContent>
+            </Tooltip>
+          }
           {linkType === "active" && <>
-            <Button onClick={onBanLinkClickHandler} variant="ghost">
-              <Ban className="h-4 w-4" />
-            </Button><Button onClick={onExternalLinkClickHandler} variant="ghost">
-              <ExternalLink className="h-4 w-4" />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger>
+                <Button onClick={onBanLinkClickHandler} variant="ghost">
+                  <Ban className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Expire link</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger>
+                <Button onClick={onExternalLinkClickHandler} variant="ghost">
+                  <ExternalLink className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Open link</p>
+              </TooltipContent>
+            </Tooltip>
           </>}
         </div>
       </div>
