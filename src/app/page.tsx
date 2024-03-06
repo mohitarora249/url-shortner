@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import TypewriterEffect from "~/components/typewriter-effect";
 import { getServerAuthSession } from "~/server/auth";
 import ActionBar from "./_components/action-bar";
+import CreateLinkForm from "./(root)/organization/[orgId]/_components/create-link-form";
 
 const Home = async () => {
   const session = await getServerAuthSession();
@@ -25,6 +26,7 @@ const Home = async () => {
         ]}
       />
       <ActionBar />
+      <CreateLinkForm />
     </div>
   );
 };

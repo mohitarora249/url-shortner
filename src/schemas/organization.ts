@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { LinkEnum } from "~/types";
 
 export const CreateOrgSchema = z.object({
   name: z.string().min(2, {
@@ -7,4 +8,4 @@ export const CreateOrgSchema = z.object({
   host: z.string().url({message: "Host must be a valid url."}).optional()
 });
 
-export const OrgIDSchema = z.object({ orgId: z.string() })
+export const OrgIDSchema = z.object({ orgId: z.string(), linkType: LinkEnum });

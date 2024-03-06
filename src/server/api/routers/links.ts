@@ -34,10 +34,18 @@ export const linksRouter = createTRPCRouter({
   getAllAvailableLinksByOrgId: protectedProcedure
     .input(OrgIDSchema)
     .query(({ ctx, input }) => {
+      let conditions = {};
+      if (input.linkType === "active") {
+        conditions = { OR: [{ expirationTime: { gt: new Date() } }, { expirationTime: null }], isDeleted: false };
+      } else if (input.linkType === "expired") {
+        conditions = { lt: new Date(), isDeleted: false };
+      } else if (input.linkType === "deleted") {
+        conditions = { isDeleted: true };
+      }
       return ctx.db.links.findMany({
         where: {
           organizationId: input.orgId,
-          isDeleted: false,
+          ...conditions
         },
       });
     }),

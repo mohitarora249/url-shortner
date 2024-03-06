@@ -3,13 +3,18 @@
 import { useParams } from "next/navigation";
 import { api } from "~/trpc/react";
 import LinkItem from "./link-item";
+import { LinkType } from "~/types";
 
-const LinksList = () => {
+type Props = {
+  linkType?: LinkType
+}
+
+const LinksList = ({ linkType = "active"}: Props) => {
   const params = useParams();
   const orgId = params.orgId as string;
   const { data, isFetching, isFetched } =
     api.links.getAllAvailableLinksByOrgId.useQuery(
-      { orgId },
+      { orgId, linkType },
       { enabled: !!orgId },
     );
 

@@ -11,7 +11,7 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import useCreateLink from "~/hooks/use-create-link";
-import { Loader2 } from "lucide-react";
+import { Loader2, MailIcon } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -38,7 +38,12 @@ const CreateLinkForm = () => {
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormControl>
-                  <Input placeholder="Enter link here" {...field} />
+                  <div className="flex items-center w-full bg-gray-50 rounded-lg overflow-hidden">
+                    <div className="px-3 py-2 bg-gray-100">
+                      <div className="text-gray-500">https://www.</div>
+                    </div>
+                    <Input placeholder="Enter link here" {...field} />
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
