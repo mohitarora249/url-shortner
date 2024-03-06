@@ -14,7 +14,7 @@ const LinksList = ({ linkType = "active"}: Props) => {
   const orgId = params.orgId as string;
   const { data, isFetching, isFetched } =
     api.links.getAllAvailableLinksByOrgId.useQuery(
-      { orgId, linkType, page: 1 },
+      { orgId, linkType, page: 0 },
       { enabled: !!orgId },
     );
 
