@@ -19,7 +19,7 @@ type Props = {
 
 const CreateOrgForm = ({ callback }: Props) => {
 
-  const { onSubmit, form, isLoading } = useCreateOrganization();
+  const { onSubmit, form, isLoading } = useCreateOrganization({ callback });
 
   return (
     <Form {...form}>

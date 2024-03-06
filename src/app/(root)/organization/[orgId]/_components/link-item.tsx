@@ -1,5 +1,5 @@
 import { Links } from "@prisma/client";
-import { ExternalLink, Trash2 } from "lucide-react";
+import { ExternalLink, Trash2, Ban } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { env } from "~/env";
@@ -12,17 +12,24 @@ const LinkItem = ({ shortLink, id, link, linkType }: Props) => {
   const url = `${env.NEXT_PUBLIC_BASE_URL}/${shortLink}`;
   const onExternalLinkClickHandler = () => window.open(url);
   const { links } = api.useUtils();
-  const { mutate } = api.links.deleteById.useMutation({
+
+  const { mutate: deleteLinkById } = api.links.deleteById.useMutation({
     onSuccess: () => {
       toast.success("Link deleted");
       links.invalidate();
     },
     onError: () => toast.error("Error occurred while deleting link"),
   });
+  const { mutate: expireLinkById } = api.links.expireById.useMutation({
+    onSuccess: () => {
+      toast.success("Link expired");
+      links.invalidate();
+    },
+    onError: () => toast.error("Error occurred while expiring link"),
+  });
 
-  const deleteLinkHandler = () => {
-    mutate({ id });
-  };
+  const deleteLinkHandler = () => deleteLinkById({ id });
+  const onBanLinkClickHandler = () => expireLinkById({ id });
 
   return (
     <div
@@ -38,9 +45,13 @@ const LinkItem = ({ shortLink, id, link, linkType }: Props) => {
           {linkType !== "deleted" && <Button onClick={deleteLinkHandler} variant="ghost">
             <Trash2 className="h-4 w-4" />
           </Button>}
-          {linkType === "active" && <Button onClick={onExternalLinkClickHandler} variant="ghost">
-            <ExternalLink className="h-4 w-4" />
-          </Button>}
+          {linkType === "active" && <>
+            <Button onClick={onBanLinkClickHandler} variant="ghost">
+              <Ban className="h-4 w-4" />
+            </Button><Button onClick={onExternalLinkClickHandler} variant="ghost">
+              <ExternalLink className="h-4 w-4" />
+            </Button>
+          </>}
         </div>
       </div>
     </div>
