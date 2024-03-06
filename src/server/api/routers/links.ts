@@ -44,7 +44,7 @@ export const linksRouter = createTRPCRouter({
         conditions = { isDeleted: true };
       }
       return ctx.db.links.findMany({
-        skip: LINKS_PER_PAGE * (input.page ?? 1),
+        skip: LINKS_PER_PAGE * (input.page ?? 0),
         take: LINKS_PER_PAGE,
         where: {
           AND: [{ organizationId: input.orgId},  { ...conditions }]
