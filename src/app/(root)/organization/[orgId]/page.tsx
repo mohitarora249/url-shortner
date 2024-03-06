@@ -9,7 +9,7 @@ const Organization = () => {
         <div className="flex space-x-2 md:space-x-4">
           <CreateLinkForm />
         </div>
-        <Tabs defaultValue="active-links" className="w-[400px]">
+        <Tabs defaultValue="active-links" className="w-full">
           <TabsList>
             <TabsTrigger value="active-links">Active Links</TabsTrigger>
             <TabsTrigger value="expired-links">Expired Links</TabsTrigger>

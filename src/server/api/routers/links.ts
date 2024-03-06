@@ -6,6 +6,7 @@ import { nanoid } from "nanoid";
 import { calculateExpirationTime } from "~/server/utils";
 import ratelimit from "~/server/rate-limiter";
 import { TRPCError } from "@trpc/server";
+import { LINKS_PER_PAGE } from "~/constants";
 
 export const linksRouter = createTRPCRouter({
   getById: protectedProcedure
@@ -38,14 +39,16 @@ export const linksRouter = createTRPCRouter({
       if (input.linkType === "active") {
         conditions = { OR: [{ expirationTime: { gt: new Date() } }, { expirationTime: null }], isDeleted: false };
       } else if (input.linkType === "expired") {
-        conditions = { lt: new Date(), isDeleted: false };
+        conditions = { AND: [{ lt: new Date() }, { isDeleted: false }] };
       } else if (input.linkType === "deleted") {
         conditions = { isDeleted: true };
       }
       return ctx.db.links.findMany({
+        skip: LINKS_PER_PAGE * (input.page ?? 1),
+        take: LINKS_PER_PAGE,
         where: {
-          organizationId: input.orgId,
-          ...conditions
+          organizationId: input.orgId,        
+          ...conditions,
         },
       });
     }),

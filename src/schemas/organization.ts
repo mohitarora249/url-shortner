@@ -8,4 +8,4 @@ export const CreateOrgSchema = z.object({
   host: z.string().url({message: "Host must be a valid url."}).optional()
 });
 
-export const OrgIDSchema = z.object({ orgId: z.string(), linkType: LinkEnum });
+export const OrgIDSchema = z.object({ orgId: z.string(), linkType: LinkEnum, page: z.number() });
