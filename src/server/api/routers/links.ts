@@ -39,7 +39,7 @@ export const linksRouter = createTRPCRouter({
       if (input.linkType === "active") {
         conditions = { AND: [{OR: [{ expirationTime: { gt: new Date() } }, { expirationTime: null }]}, {isDeleted: false} ]};
       } else if (input.linkType === "expired") {
-        conditions = { AND: [{ lt: new Date() }, { isDeleted: false }] };
+        conditions = { AND: [{ expirationTime: { lt: new Date() } }, { isDeleted: false }] };
       } else if (input.linkType === "deleted") {
         conditions = { isDeleted: true };
       }
