@@ -83,4 +83,12 @@ export const linksRouter = createTRPCRouter({
         data: { isDeleted: true },
       });
     }),
+  markLinkActiveFromDeletedById: protectedProcedure
+    .input(MandatoryIDSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.db.links.update({
+        where: { id: input.id },
+        data: { isDeleted: false },
+      });
+    }),
 });

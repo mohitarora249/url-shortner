@@ -1,5 +1,5 @@
 import { Links } from "@prisma/client";
-import { ExternalLink, Trash2, Ban } from "lucide-react";
+import { ExternalLink, Trash2, Ban, UndoDot } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
@@ -29,7 +29,18 @@ const LinkItem = ({ shortLink, id, link, linkType }: Props) => {
     onError: () => toast.error("Error occurred while expiring link"),
   });
 
+  const { mutate: activateLinkById } = api.links.markLinkActiveFromDeletedById.useMutation({
+    onSuccess: () => {
+      toast.success("Link activated");
+      links.invalidate();
+    },
+    onError: () => toast.error("Error occurred while activating link"),
+  });
+
+  
+
   const deleteLinkHandler = () => deleteLinkById({ id });
+  const markLinkActiveFromDeletedById = () => activateLinkById({ id });
   const onBanLinkClickHandler = () => expireLinkById({ id });
 
   return (
@@ -50,8 +61,20 @@ const LinkItem = ({ shortLink, id, link, linkType }: Props) => {
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>
+              <TooltipContent side="bottom">
                 <p>Delete link</p>
+              </TooltipContent>
+            </Tooltip>
+          }
+          {linkType === "deleted" &&
+            <Tooltip>
+              <TooltipTrigger>
+                <Button onClick={markLinkActiveFromDeletedById} variant="ghost">
+                  <UndoDot className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Active link</p>
               </TooltipContent>
             </Tooltip>
           }
@@ -62,7 +85,7 @@ const LinkItem = ({ shortLink, id, link, linkType }: Props) => {
                   <Ban className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>
+              <TooltipContent side="bottom">
                 <p>Expire link</p>
               </TooltipContent>
             </Tooltip>
@@ -72,7 +95,7 @@ const LinkItem = ({ shortLink, id, link, linkType }: Props) => {
                   <ExternalLink className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>
+              <TooltipContent side="bottom">
                 <p>Open link</p>
               </TooltipContent>
             </Tooltip>
