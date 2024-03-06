@@ -38,12 +38,7 @@ const CreateLinkForm = () => {
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormControl>
-                  <div className="flex items-center w-full bg-gray-50 rounded-lg overflow-hidden">
-                    <div className="px-3 py-2 bg-gray-100">
-                      <div className="text-gray-500">https://www.</div>
-                    </div>
-                    <Input placeholder="Enter link here" {...field} />
-                  </div>
+                  <Input placeholder="Enter link here" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
