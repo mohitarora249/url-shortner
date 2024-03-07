@@ -6,7 +6,6 @@ import { TRPCReactProvider } from "~/trpc/react";
 import { Session } from "next-auth";
 import { redirect } from "next/navigation";
 import Providers from "./providers";
-import TopNav from "./_components/top-nav";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -35,7 +34,6 @@ export default function RootLayout({
         <Providers session={session}>
           <TRPCReactProvider>
             <main className="flex h-screen w-screen flex-col">
-              {!session?.user.id && <TopNav />}
               <div className="flex-1">{children}</div>
             </main>
           </TRPCReactProvider>

@@ -1,13 +1,11 @@
 "use client";
 
 import Link from "next/link"
-import { usePathname } from "next/navigation";
 import { cn } from "~/lib/utils"
-import { Button } from "~/components/ui/button";
 import GoogleLogin from "~/components/google-login";
 import { useSession } from "next-auth/react";
 
-const TopNav = () => {
+const RootNav = () => {
   const session = useSession();
   
   if (session.data?.user.id) return null;
@@ -45,4 +43,4 @@ function MainNav({
   )
 }
 
-export default TopNav;
+export default RootNav;
