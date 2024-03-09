@@ -2,7 +2,11 @@ import { Links } from "@prisma/client";
 import { ExternalLink, Trash2, Ban, UndoDot } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "~/components/ui/tooltip";
 import { env } from "~/env";
 import { api } from "~/trpc/react";
 import { LinkType } from "~/types";
@@ -29,15 +33,14 @@ const LinkItem = ({ shortLink, id, link, linkType }: Props) => {
     onError: () => toast.error("Error occurred while expiring link"),
   });
 
-  const { mutate: activateLinkById } = api.links.markLinkActiveFromDeletedById.useMutation({
-    onSuccess: () => {
-      toast.success("Link activated");
-      links.invalidate();
-    },
-    onError: () => toast.error("Error occurred while activating link"),
-  });
-
-  
+  const { mutate: activateLinkById } =
+    api.links.markLinkActiveFromDeletedById.useMutation({
+      onSuccess: () => {
+        toast.success("Link activated");
+        links.invalidate();
+      },
+      onError: () => toast.error("Error occurred while activating link"),
+    });
 
   const deleteLinkHandler = () => deleteLinkById({ id });
   const markLinkActiveFromDeletedById = () => activateLinkById({ id });
@@ -46,60 +49,62 @@ const LinkItem = ({ shortLink, id, link, linkType }: Props) => {
   return (
     <div
       key={id}
-      className="flex w-full cursor-pointer flex-col rounded-md pl-2 hover:bg-gray-50"
+      className="flex w-full cursor-pointer flex-col rounded-md hover:bg-gray-50"
     >
       <div className="flex items-center">
         <div className="flex w-full flex-col">
-          <div className="font-bold">{url}</div>
-          <div className="text-sm">{link}</div>
+          <div className="md:text-normal text-sm font-bold">{url}</div>
+          <div className="text-xs md:text-sm">{link}</div>
         </div>
-        <div className="flex w-full justify-end space-x-2">
-          {linkType !== "deleted" &&
+        <div className="flex w-full justify-end space-x-1 md:space-x-2">
+          {linkType !== "deleted" && (
             <Tooltip>
               <TooltipTrigger>
                 <Button onClick={deleteLinkHandler} variant="ghost">
-                  <Trash2 className="h-4 w-4" />
+                  <Trash2 className="h-3 w-3 md:h-4 md:w-4" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
                 <p>Delete link</p>
               </TooltipContent>
             </Tooltip>
-          }
-          {linkType === "deleted" &&
+          )}
+          {linkType === "deleted" && (
             <Tooltip>
               <TooltipTrigger>
                 <Button onClick={markLinkActiveFromDeletedById} variant="ghost">
-                  <UndoDot className="h-4 w-4" />
+                  <UndoDot className="h-3 w-3 md:h-4 md:w-4" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
                 <p>Active link</p>
               </TooltipContent>
             </Tooltip>
-          }
-          {linkType === "active" && <>
-            <Tooltip>
-              <TooltipTrigger>
-                <Button onClick={onBanLinkClickHandler} variant="ghost">
-                  <Ban className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Expire link</p>
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger>
-                <Button onClick={onExternalLinkClickHandler} variant="ghost">
-                  <ExternalLink className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Open link</p>
-              </TooltipContent>
-            </Tooltip>
-          </>}
+          )}
+          {linkType === "active" && (
+            <>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Button onClick={onBanLinkClickHandler} variant="ghost">
+                    <Ban className="h-3 w-3 md:h-4 md:w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  <p>Expire link</p>
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Button onClick={onExternalLinkClickHandler} variant="ghost">
+                    <ExternalLink className="h-3 w-3 md:h-4 md:w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  <p>Open link</p>
+                </TooltipContent>
+              </Tooltip>
+            </>
+          )}
         </div>
       </div>
     </div>

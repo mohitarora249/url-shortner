@@ -30,7 +30,7 @@ const CreateLinkForm = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="mb-4 flex w-full space-x-4"
+          className="mb-4 flex w-full space-x-1 md:space-x-4"
         >
           <FormField
             control={form.control}
@@ -53,7 +53,7 @@ const CreateLinkForm = () => {
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
-                  <FormControl>
+                  <FormControl className="">
                     <SelectTrigger className="min-w-max">
                       <SelectValue placeholder="No Expiration" />
                     </SelectTrigger>
