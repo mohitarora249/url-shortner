@@ -43,11 +43,11 @@ const LinkItem = ({ shortLink, id, link, linkType }: Props) => {
   const deleteLinkHandler = () => deleteLinkById({ id });
   const onBanLinkClickHandler = () => expireLinkById({ id });
   const generate = async () => {
-    const res = await QRCode.toDataURL(link, {
+    const linkQR = await QRCode.toDataURL(link, {
       type: 'image/jpeg',
       rendererOpts: { quality: 1 }
     });
-    setQrCode(res);
+    setQrCode(linkQR);
   }
 
   return (
@@ -63,8 +63,8 @@ const LinkItem = ({ shortLink, id, link, linkType }: Props) => {
               <div className="text-sm">{link}</div>
             </div>
           </HoverCardTrigger>
-          <HoverCardContent className="w-80">
-            {qrCode ? <Image alt={`QR Code from link ${link}`} height={250} width={250} src={qrCode} /> : <Skeleton className="h-[250px] w-[250px]" />}
+          <HoverCardContent className="h-[250px] w-[250px]">
+            {!qrCode ? <Skeleton className="h-[250px] w-[250px]" /> : <Image alt={`QR Code from link ${link}`} height={250} width={250} src={qrCode} />}
           </HoverCardContent>
         </HoverCard>
         <div className="flex w-full justify-end space-x-2">
