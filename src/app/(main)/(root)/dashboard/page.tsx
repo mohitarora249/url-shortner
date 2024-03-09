@@ -19,7 +19,7 @@ const Dashboard = () => {
   const { data, isLoading } = api.organization.getAll.useQuery();
 
   return (
-    <div>
+    <div className="mx-2">
       {isLoading && <div>Loading</div>}
       {!isLoading && data && data?.length === 0 && (
         <div className="flex h-full w-full items-center justify-center">

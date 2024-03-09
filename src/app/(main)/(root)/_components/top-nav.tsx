@@ -1,18 +1,18 @@
 "use client";
 
-import Link from "next/link"
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { cn } from "~/lib/utils"
-import OrganizationSwitcher from "./organization-switcher"
-import UserNav from "./user-nav"
+import { cn } from "~/lib/utils";
+import OrganizationSwitcher from "./organization-switcher";
+import UserNav from "./user-nav";
 
 const TopNav = () => {
   const pathname = usePathname();
   return (
-    <div className="hidden flex-col md:flex">
+    <div className="flex-col md:flex">
       <div className="border-b">
-        <div className="flex h-16 items-center px-4 max-w-full md:max-w-screen-lg md:mx-auto">
-          <Link href="/dashboard" className="cursor-pointer mx-6">
+        <div className="flex h-16 max-w-full items-center px-4 md:mx-auto md:max-w-screen-lg">
+          <Link href="/dashboard" className="mx:2 cursor-pointer md:mx-6">
             <div className="text-lg font-extrabold tracking-wide">
               <span>Link</span>
               <span className="text-blue-500">Lift</span>
@@ -26,16 +26,16 @@ const TopNav = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-function MainNav({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLElement>) {
+function MainNav({ className, ...props }: React.HTMLAttributes<HTMLElement>) {
   return (
     <nav
-      className={cn("flex items-center space-x-4 lg:space-x-6", className)}
+      className={cn(
+        "hidden items-center space-x-4 md:flex lg:space-x-6",
+        className,
+      )}
       {...props}
     >
       <Link
@@ -45,7 +45,7 @@ function MainNav({
         Dashboard
       </Link>
     </nav>
-  )
+  );
 }
 
 export default TopNav;
