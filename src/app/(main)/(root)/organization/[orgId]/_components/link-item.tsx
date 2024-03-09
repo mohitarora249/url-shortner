@@ -57,7 +57,7 @@ const LinkItem = ({ shortLink, id, link, linkType }: Props) => {
   const markLinkActiveFromDeletedById = () => activateLinkById({ id });
 
   const onLinkMouseOverHandler = async () => {
-    const linkQR = await generateQRCode(link);
+    const linkQR = await generateQRCode(url);
     setQrCode(linkQR);
   };
 
