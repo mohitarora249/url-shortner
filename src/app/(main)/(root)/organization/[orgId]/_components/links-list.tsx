@@ -6,8 +6,8 @@ import LinkItem from "./link-item";
 import { LinkType } from "~/types";
 
 type Props = {
-  linkType?: LinkType
-}
+  linkType?: LinkType;
+};
 
 const LinksList = ({ linkType = "active" }: Props) => {
   const params = useParams();
@@ -21,7 +21,10 @@ const LinksList = ({ linkType = "active" }: Props) => {
 
   return (
     <div className="h-full">
-      {isFetching && !isFetched && <div>Fetching data</div>}
+      {isFetching && !isFetched && <div className="">Loading</div>}
+      {data?.length === 0 && (
+        <div className="mt-4 flex justify-center">No links available</div>
+      )}
       {isFetched && data && (
         <div className="flex flex-col p-4 pt-0">
           {data.map((item) => (

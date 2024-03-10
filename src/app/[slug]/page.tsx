@@ -25,6 +25,12 @@ const RedirectionPage = async ({ params }: Props) => {
 
   if (!data) return <div className="h-screen">Link Not Found</div>;
 
+  // if (data && data?.organizationId) {
+  //   const exists = await redis.exists(data.organizationId);
+  //   if (exists) await redis.incr(data.organizationId);
+  //   else await redis.set(data.organizationId, 1);
+  // }
+
   if (
     data &&
     data.expirationTime &&

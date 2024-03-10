@@ -1,6 +1,8 @@
 import CreateLinkForm from "./_components/create-link-form";
 import LinksList from "./_components/links-list";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import Overview from "./_components/overview";
+import { ORGANIZATION_PAGE_TABS } from "~/constants";
 
 const Organization = () => {
   return (
@@ -9,12 +11,17 @@ const Organization = () => {
         <div className="flex space-x-2 md:space-x-4">
           <CreateLinkForm />
         </div>
-        <Tabs defaultValue="active-links" className="w-full">
-          <TabsList>
-            <TabsTrigger value="active-links">Active Links</TabsTrigger>
-            <TabsTrigger value="expired-links">Expired Links</TabsTrigger>
-            <TabsTrigger value="deleted-links">Deleted Links</TabsTrigger>
+        <Tabs defaultValue="overview" className="w-full space-y-8">
+          <TabsList className="w-full">
+            {ORGANIZATION_PAGE_TABS.map((tab) => (
+              <TabsTrigger className="w-full" key={tab.value} value={tab.value}>
+                {tab.label}
+              </TabsTrigger>
+            ))}
           </TabsList>
+          <TabsContent value="overview">
+            <Overview />
+          </TabsContent>
           <TabsContent value="active-links">
             <LinksList />
           </TabsContent>
