@@ -9,7 +9,9 @@ export const ExpirationEnum = z.enum([
 ]);
 
 export const CreateShortenLink = z.object({
-  link: z.string().url({ message: "Must be a valid url." }),
+  link: z
+    .string()
+    .url({ message: "Must be a valid url. e.g. https://www.linklift.in" }),
   orgId: z.string(),
   expiration: ExpirationEnum,
 });

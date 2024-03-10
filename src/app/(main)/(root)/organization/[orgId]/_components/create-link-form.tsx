@@ -38,7 +38,7 @@ const CreateLinkForm = () => {
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormControl>
-                  <Input placeholder="Enter link here" {...field} />
+                  <Input placeholder="https://www.linklift.in" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
