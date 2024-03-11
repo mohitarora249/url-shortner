@@ -1,6 +1,7 @@
 "use client";
 import { Links } from "@prisma/client";
 import { ExternalLink, Trash2, Ban, UndoDot } from "lucide-react";
+import { Badge } from "~/components/ui/badge";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import {
@@ -20,10 +21,11 @@ import Image from "next/image";
 import { useState } from "react";
 import { Skeleton } from "~/components/ui/skeleton";
 import { generateQRCode } from "~/lib/qr-code";
+import { format } from "date-fns";
 
 type Props = Links & { linkType: LinkType };
 
-const LinkItem = ({ shortLink, id, link, linkType }: Props) => {
+const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
   const [qrCode, setQrCode] = useState("");
   const url = `${env.NEXT_PUBLIC_BASE_URL}/${shortLink}`;
   const onExternalLinkClickHandler = () => window.open(url);
@@ -72,19 +74,11 @@ const LinkItem = ({ shortLink, id, link, linkType }: Props) => {
             <div className="flex w-full flex-col">
               <div className="font-bold">{url}</div>
               <div className="text-sm">{link}</div>
+              {expirationTime && <Badge className="mt-[2px]" variant="secondary">Expires at : {format(expirationTime, "dd-MM-yyyy HH:mm:ss")}</Badge>}
             </div>
           </HoverCardTrigger>
-          <HoverCardContent className="m-0 h-[250px] w-[250px] p-0">
-            {!qrCode ? (
-              <Skeleton className="h-[250px] w-[250px]" />
-            ) : (
-              <Image
-                alt={`QR Code from link ${link}`}
-                height={250}
-                width={250}
-                src={qrCode}
-              />
-            )}
+          <HoverCardContent className="h-[250px] w-[250px] p-0 m-0">
+            {!qrCode ? <Skeleton className="h-[250px] w-[250px]" /> : <Image alt={`QR Code from link ${link}`} height={250} width={250} src={qrCode} />}
           </HoverCardContent>
         </HoverCard>
         <div className="flex w-full justify-end space-x-2">
