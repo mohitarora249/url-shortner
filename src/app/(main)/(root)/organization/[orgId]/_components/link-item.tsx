@@ -74,7 +74,7 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
             <div className="flex w-full flex-col">
               <div className="font-bold">{url}</div>
               <div className="text-sm">{link}</div>
-              {expirationTime && <Badge className="mt-[2px]" variant="secondary">Expires at : {format(expirationTime, "dd-MM-yyyy HH:mm:ss")}</Badge>}
+              {expirationTime && <Badge className="my-[2px] w-fit" variant="outline">Expires at : {format(expirationTime, "dd-MM-yyyy HH:mm:ss")}</Badge>}
             </div>
           </HoverCardTrigger>
           <HoverCardContent className="h-[250px] w-[250px] p-0 m-0">
