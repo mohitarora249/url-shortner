@@ -28,7 +28,7 @@ type Props = Links & { linkType: LinkType };
 
 const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
   const [qrCode, setQrCode] = useState("");
-  const { copyToClipboard } = useClipboard(window.location.href);
+  const { copyToClipboard } = useClipboard();
   const url = `${env.NEXT_PUBLIC_BASE_URL}/${shortLink}`;
   const onExternalLinkClickHandler = () => window.open(url);
   const { links } = api.useUtils();
@@ -59,9 +59,7 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
   const deleteLinkHandler = () => deleteLinkById({ id });
   const onBanLinkClickHandler = () => expireLinkById({ id });
   const markLinkActiveFromDeletedById = () => activateLinkById({ id });
-  const copyLinkHandler = () => {
-    copyToClipboard();
-  }
+  const copyLinkHandler = () => copyToClipboard(window.location.href);
   const onLinkMouseOverHandler = async () => {
     const linkQR = await generateQRCode(url);
     setQrCode(linkQR);
