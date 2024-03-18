@@ -27,7 +27,6 @@ import useClipboard from "~/hooks/common/use-clipboard";
 type Props = Links & { linkType: LinkType };
 
 const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
-  const [qrCode, setQrCode] = useState("");
   const { copyToClipboard } = useClipboard();
   const url = `${env.NEXT_PUBLIC_BASE_URL}/${shortLink}`;
   const onExternalLinkClickHandler = () => window.open(url);
@@ -60,40 +59,33 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
   const onBanLinkClickHandler = () => expireLinkById({ id });
   const markLinkActiveFromDeletedById = () => activateLinkById({ id });
   const copyLinkHandler = () => copyToClipboard(url);
-  const onLinkMouseOverHandler = async () => {
-    const linkQR = await generateQRCode(url);
-    setQrCode(linkQR);
-  };
 
   return (
     <div
       key={id}
       className="flex w-full cursor-pointer flex-col rounded-md pl-2 hover:bg-gray-50"
     >
-      <div className="flex items-center" onMouseOver={onLinkMouseOverHandler}>
-        <HoverCard>
-          <HoverCardTrigger className="w-full" asChild>
-            <div className="flex w-full flex-col">
-              <div className="font-bold">{url}</div>
-              <div className="text-sm">{link}</div>
-              {expirationTime && <Badge className="my-[2px] w-fit" variant="outline">Expires at : {format(expirationTime, "dd-MM-yyyy HH:mm:ss")}</Badge>}
-            </div>
-          </HoverCardTrigger>
-          <HoverCardContent className="h-[250px] w-[250px] p-0 m-0">
-            {!qrCode ? <Skeleton className="h-[250px] w-[250px]" /> : <Image alt={`QR Code from link ${link}`} height={250} width={250} src={qrCode} />}
-          </HoverCardContent>
-        </HoverCard>
+      <div className="flex items-center">
+        <div className="flex w-full flex-col">
+          <div className="font-bold">{url}</div>
+          <div className="text-sm">{link}</div>
+          {expirationTime && (
+            <Badge className="my-[2px] w-fit" variant="outline">
+              Expires at : {format(expirationTime, "dd-MM-yyyy HH:mm:ss")}
+            </Badge>
+          )}
+        </div>
         <div className="flex w-full justify-end space-x-2">
           <Tooltip>
-              <TooltipTrigger>
-                <Button onClick={copyLinkHandler} variant="ghost">
-                  <Copy className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Copy link</p>
-              </TooltipContent>
-            </Tooltip>
+            <TooltipTrigger>
+              <Button onClick={copyLinkHandler} variant="ghost">
+                <Copy className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Copy link</p>
+            </TooltipContent>
+          </Tooltip>
           {linkType !== "deleted" && (
             <Tooltip>
               <TooltipTrigger>
