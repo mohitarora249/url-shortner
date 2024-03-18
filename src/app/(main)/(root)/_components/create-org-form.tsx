@@ -14,11 +14,10 @@ import { Input } from "~/components/ui/input";
 import useCreateOrganization from "~/hooks/use-create-organization";
 
 type Props = {
-  callback?: () => void
-}
+  callback?: () => void;
+};
 
 const CreateOrgForm = ({ callback }: Props) => {
-
   const { onSubmit, form, isLoading } = useCreateOrganization({ callback });
 
   return (
@@ -37,26 +36,15 @@ const CreateOrgForm = ({ callback }: Props) => {
             </FormItem>
           )}
         />
-        {/* <FormField
-          control={form.control}
-          name="host"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Host name</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */}
-        <Button disabled={isLoading} type="submit">
-          {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          Submit
-        </Button>
+        <div className="flex justify-end">
+          <Button disabled={isLoading} type="submit">
+            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Submit
+          </Button>
+        </div>
       </form>
     </Form>
-  )
-}
+  );
+};
 
 export default CreateOrgForm;

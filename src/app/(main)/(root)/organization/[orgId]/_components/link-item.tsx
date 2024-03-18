@@ -69,7 +69,7 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
         <div className="flex w-full flex-col">
           <div className="font-bold">{url}</div>
           <div className="text-sm">{link}</div>
-          {expirationTime && (
+          {expirationTime && linkType === "active" && (
             <Badge className="my-[2px] w-fit" variant="outline">
               Expires at : {format(expirationTime, "dd-MM-yyyy HH:mm:ss")}
             </Badge>
