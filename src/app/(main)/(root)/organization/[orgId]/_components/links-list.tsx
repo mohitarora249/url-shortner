@@ -4,7 +4,8 @@ import { useParams } from "next/navigation";
 import { api } from "~/trpc/react";
 import LinkItem from "./link-item";
 import { LinkType } from "~/types";
-
+import { Skeleton } from "~/components/ui/skeleton";
+import LinkListSkeleton from "./link-list-skeleton";
 type Props = {
   linkType?: LinkType;
 };
@@ -21,9 +22,7 @@ const LinksList = ({ linkType = "active" }: Props) => {
 
   return (
     <div className="h-full">
-      {isFetching && !isFetched && (
-        <div className="mt-4 flex  justify-center">Loading</div>
-      )}
+      {isFetching && !isFetched && <LinkListSkeleton />}
       {data?.length === 0 && (
         <div className="mt-4 flex  justify-center">No links available</div>
       )}
