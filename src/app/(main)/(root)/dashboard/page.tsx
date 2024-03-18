@@ -14,13 +14,14 @@ import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
 import { useState } from "react";
 import { toast } from "sonner";
+import OrganizationListSkeleton from "./_components/organization-list-skeleton";
 
 const Dashboard = () => {
   const { data, isLoading } = api.organization.getAll.useQuery();
 
   return (
     <div className="mx-2">
-      {isLoading && <div>Loading</div>}
+      {isLoading && <OrganizationListSkeleton />}
       {!isLoading && data && data?.length === 0 && (
         <div className="flex h-full w-full items-center justify-center">
           <CreateOrganization />
