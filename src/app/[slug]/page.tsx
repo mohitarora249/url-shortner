@@ -3,6 +3,7 @@ import { db } from "~/server/db";
 import { Links } from "@prisma/client";
 import { isAfter } from "date-fns";
 import redis from "~/server/redis";
+import NotFound from "./_components/not-found";
 
 type Props = {
   params: { slug: string };
@@ -23,23 +24,24 @@ const RedirectionPage = async ({ params }: Props) => {
     await redis.set(params.slug, JSON.stringify(data));
   }
 
-  if (!data) return <div className="h-screen">Link Not Found</div>;
-
-  // if (data && data?.organizationId) {
-  //   const exists = await redis.exists(data.organizationId);
-  //   if (exists) await redis.incr(data.organizationId);
-  //   else await redis.set(data.organizationId, 1);
-  // }
+  if (!data)
+    return (
+      <NotFound message="Looks like the link you are trying to access does not exists" />
+    );
 
   if (
     data &&
     data.expirationTime &&
     isAfter(new Date(), new Date(data.expirationTime))
   )
-    return <div className="h-screen">Link Expired</div>;
+    return (
+      <NotFound message="Looks like the link you are trying to access is expired" />
+    );
 
   if (data && data.isDeleted)
-    return <div className="h-screen">Link Deleted</div>;
+    return (
+      <NotFound message="Looks like the link you are trying to access is removed from our system" />
+    );
 
   if (data && data.link) redirect(data.link);
 
