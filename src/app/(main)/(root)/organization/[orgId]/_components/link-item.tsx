@@ -1,6 +1,6 @@
 "use client";
 import { Links } from "@prisma/client";
-import { ExternalLink, Trash2, Ban, UndoDot } from "lucide-react";
+import { ExternalLink, Trash2, Ban, UndoDot, Copy } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
@@ -22,11 +22,13 @@ import { useState } from "react";
 import { Skeleton } from "~/components/ui/skeleton";
 import { generateQRCode } from "~/lib/qr-code";
 import { format } from "date-fns";
+import useClipboard from "~/hooks/common/use-clipboard";
 
 type Props = Links & { linkType: LinkType };
 
 const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
   const [qrCode, setQrCode] = useState("");
+  const { copyToClipboard } = useClipboard(window.location.href);
   const url = `${env.NEXT_PUBLIC_BASE_URL}/${shortLink}`;
   const onExternalLinkClickHandler = () => window.open(url);
   const { links } = api.useUtils();
@@ -57,7 +59,9 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
   const deleteLinkHandler = () => deleteLinkById({ id });
   const onBanLinkClickHandler = () => expireLinkById({ id });
   const markLinkActiveFromDeletedById = () => activateLinkById({ id });
-
+  const copyLinkHandler = () => {
+    copyToClipboard();
+  }
   const onLinkMouseOverHandler = async () => {
     const linkQR = await generateQRCode(url);
     setQrCode(linkQR);
@@ -82,6 +86,16 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
           </HoverCardContent>
         </HoverCard>
         <div className="flex w-full justify-end space-x-2">
+          <Tooltip>
+              <TooltipTrigger>
+                <Button onClick={copyLinkHandler} variant="ghost">
+                  <Copy className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Copy link</p>
+              </TooltipContent>
+            </Tooltip>
           {linkType !== "deleted" && (
             <Tooltip>
               <TooltipTrigger>
