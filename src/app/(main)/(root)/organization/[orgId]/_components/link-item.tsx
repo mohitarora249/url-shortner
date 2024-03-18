@@ -59,7 +59,7 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
   const deleteLinkHandler = () => deleteLinkById({ id });
   const onBanLinkClickHandler = () => expireLinkById({ id });
   const markLinkActiveFromDeletedById = () => activateLinkById({ id });
-  const copyLinkHandler = () => copyToClipboard(window.location.href);
+  const copyLinkHandler = () => copyToClipboard(link);
   const onLinkMouseOverHandler = async () => {
     const linkQR = await generateQRCode(url);
     setQrCode(linkQR);
