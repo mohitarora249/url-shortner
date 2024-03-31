@@ -86,7 +86,7 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
               <p>Copy link</p>
             </TooltipContent>
           </Tooltip>
-          {linkType !== "deleted" && (
+          {linkType !== "deleted" && linkType !== "expired" && (
             <Tooltip>
               <TooltipTrigger>
                 <Button onClick={deleteLinkHandler} variant="ghost">

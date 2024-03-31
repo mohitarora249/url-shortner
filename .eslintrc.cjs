@@ -19,6 +19,10 @@ const config = {
     "@typescript-eslint/no-floating-promises": "off",
     "@typescript-eslint/consistent-indexed-object-style": "off",
     "@typescript-eslint/prefer-optional-chain": "off",
+    "@typescript-eslint/no-unsafe-assignment": "warn",
+    "@typescript-eslint/no-unsafe-member-access": "warn",
+    "@typescript-eslint/no-unsafe-call": "warn",
+    "@typescript-eslint/no-unsafe-return": "off",
     "@typescript-eslint/consistent-type-imports": [
       "warn",
       {

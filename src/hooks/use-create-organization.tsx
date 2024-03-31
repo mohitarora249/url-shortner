@@ -27,7 +27,6 @@ const useCreateOrganization = ({ callback }: Args) => {
   });
 
   const onSubmit = (values: z.infer<typeof CreateOrgSchema>) => {
-    console.log("onSubmit : ", values);
     mutate({ name: values.name, host: values.host });
     if (callback) callback();
   };
