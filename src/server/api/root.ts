@@ -1,6 +1,7 @@
 import { organizationRouter } from "~/server/api/routers/organization";
 import { linksRouter } from "~/server/api/routers/links";
 import { createTRPCRouter } from "~/server/api/trpc";
+import { analyticsRouter } from "./routers/analytics";
 
 /**
  * This is the primary router for your server.
@@ -9,7 +10,8 @@ import { createTRPCRouter } from "~/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
   organization: organizationRouter,
-  links: linksRouter
+  links: linksRouter,
+  analytics: analyticsRouter
 });
 
 // export type definition of API

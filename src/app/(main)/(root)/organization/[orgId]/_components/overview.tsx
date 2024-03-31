@@ -1,6 +1,8 @@
 "use client";
 
+import { useParams } from "next/navigation";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import { api } from "~/trpc/react";
 
 const data = [
   {
@@ -54,6 +56,10 @@ const data = [
 ];
 
 const Overview = () => {
+  const params = useParams();
+  const orgId = params.orgId as string;
+  const { data: analytics, isFetching } = api.analytics.getByOrgId.useQuery({ orgId });
+  console.log("analytics : ", analytics);
   return (
     <ResponsiveContainer width="100%" height={350}>
       <BarChart data={data}>

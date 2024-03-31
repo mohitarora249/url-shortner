@@ -19,9 +19,9 @@ const Organization = () => {
               </TabsTrigger>
             ))}
           </TabsList>
-          {/* <TabsContent value="overview">
+          <TabsContent value="overview">
             <Overview />
-          </TabsContent> */}
+          </TabsContent>
           <TabsContent value="active-links">
             <LinksList />
           </TabsContent>
