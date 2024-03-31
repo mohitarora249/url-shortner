@@ -14,28 +14,34 @@ const Overview = () => {
     });
 
   return (
-    <ResponsiveContainer width="100%" height={350}>
+    <ResponsiveContainer width="100%" height={550}>
       {isFetching ? (
-        <div className="flex h-80 justify-center space-x-4">
+        <div className="flex h-96 justify-center space-x-4">
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item) => (
             <Skeleton key={item} className="h-full w-20" />
           ))}
         </div>
       ) : (
-        <BarChart data={analytics}>
+        <BarChart
+          data={analytics}
+          margin={{
+            bottom: 50,
+          }}
+        >
           <XAxis
             dataKey="formattedDate"
-            stroke="#888888"
-            fontSize={12}
-            tickLine={false}
-            axisLine={false}
+            label={{
+              value: "Date",
+              position: "insideBottom",
+              offset: -10,
+            }}
           />
           <YAxis
-            stroke="#888888"
-            fontSize={12}
-            tickLine={false}
-            axisLine={false}
-            tickFormatter={(value) => value}
+            label={{
+              value: "Links viewed",
+              angle: -90,
+              position: "inside",
+            }}
           />
           <Bar
             dataKey="viewCount"

@@ -7,7 +7,7 @@ import { ORGANIZATION_PAGE_TABS } from "~/constants";
 const Organization = () => {
   return (
     <div className="h-full w-full">
-      <div className="mx-auto max-w-screen-lg">
+      <div className="mx-auto h-full max-w-screen-lg">
         <div className="flex space-x-2 md:space-x-4">
           <CreateLinkForm />
         </div>
