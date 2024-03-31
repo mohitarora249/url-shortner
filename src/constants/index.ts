@@ -19,3 +19,5 @@ export const ORGANIZATION_PAGE_TABS = [
     value: "deleted-links",
   },
 ];
+
+export const TINY_BIRD_URL = "https://api.us-east.aws.tinybird.co"

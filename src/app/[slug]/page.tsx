@@ -4,6 +4,7 @@ import { Links } from "@prisma/client";
 import { isAfter } from "date-fns";
 import redis from "~/server/redis";
 import NotFound from "./_components/not-found";
+import sendEvent from "~/lib/tinybird";
 
 type Props = {
   params: { slug: string };
@@ -28,8 +29,8 @@ const RedirectionPage = async ({ params }: Props) => {
     return (
       <NotFound message="Looks like the link you are trying to access does not exists" />
     );
-
-  if (
+  
+    if (
     data &&
     data.expirationTime &&
     isAfter(new Date(), new Date(data.expirationTime))
@@ -42,6 +43,8 @@ const RedirectionPage = async ({ params }: Props) => {
     return (
       <NotFound message="Looks like the link you are trying to access is removed from our system" />
     );
+
+  await sendEvent({ timestamp: new Date().toISOString(), session_id: "", action: "link_view", payload: { orgId: data.organizationId, link: data.link }});
 
   if (data && data.link) redirect(data.link);
 
