@@ -47,7 +47,7 @@ const Overview = () => {
             dataKey="viewCount"
             fill="currentColor"
             radius={[4, 4, 0, 0]}
-            className="fill-primary"
+            className="fill-primary max-w-5"
           />
         </BarChart>
       )}
