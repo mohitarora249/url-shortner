@@ -11,19 +11,20 @@ import {
   DialogTrigger,
 } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
-import { Button } from "~/components/ui/button";
+import { Button, buttonVariants } from "~/components/ui/button";
 import { useState } from "react";
 import { toast } from "sonner";
 import OrganizationListSkeleton from "./_components/organization-list-skeleton";
+import { motion } from "framer-motion";
 
 const Dashboard = () => {
   const { data, isLoading } = api.organization.getAll.useQuery();
 
   return (
-    <div className="mx-2">
+    <div className="mx-2 flex h-full w-full flex-col">
       {isLoading && <OrganizationListSkeleton />}
       {!isLoading && data && data?.length === 0 && (
-        <div className="flex h-full w-full items-center justify-center">
+        <div className="flex h-full w-full flex-1 items-center justify-center">
           <CreateOrganization />
         </div>
       )}
@@ -40,6 +41,7 @@ const Dashboard = () => {
 
 const CreateOrganization = () => {
   const [orgName, setOrgName] = useState("");
+  const [open, setOpen] = useState(false);
   const orgNameChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setOrgName(e.target.value);
   };
@@ -48,14 +50,22 @@ const CreateOrganization = () => {
       onSuccess: () => {
         toast(`${orgName} organization created`);
         setOrgName("");
+        setOpen(false);
       },
     });
   const createOrgHandler = () => {
     createOrganization({ name: orgName });
   };
   return (
-    <Dialog>
-      <DialogTrigger>Create your first Organization</DialogTrigger>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger>
+        <motion.div
+          whileHover={{ scale: 1.5 }}
+          className={buttonVariants({ size: "lg" })}
+        >
+          Create your first Organization
+        </motion.div>
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="my-4">Create Organization</DialogTitle>
