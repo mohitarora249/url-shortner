@@ -22,34 +22,38 @@ const Overview = () => {
           ))}
         </div>
       ) : (
-        <BarChart
-          data={analytics}
-          margin={{
-            bottom: 50,
-          }}
-        >
-          <XAxis
-            dataKey="formattedDate"
-            label={{
-              value: "Date",
-              position: "insideBottom",
-              offset: -10,
+        <>
+          {analytics.length === 0 ? (
+            <div className="mt-4 flex  justify-center">No links visited</div>
+          ) : <BarChart
+            data={analytics}
+            margin={{
+              bottom: 50,
             }}
-          />
-          <YAxis
-            label={{
-              value: "Links viewed",
-              angle: -90,
-              position: "inside",
-            }}
-          />
-          <Bar
-            dataKey="viewCount"
-            fill="currentColor"
-            radius={[4, 4, 0, 0]}
-            className="fill-primary max-w-5"
-          />
-        </BarChart>
+          >
+            <XAxis
+              dataKey="formattedDate"
+              label={{
+                value: "Date",
+                position: "insideBottom",
+                offset: -10,
+              }}
+            />
+            <YAxis
+              label={{
+                value: "Links viewed",
+                angle: -90,
+                position: "inside",
+              }}
+            />
+            <Bar
+              dataKey="viewCount"
+              fill="currentColor"
+              radius={[4, 4, 0, 0]}
+              className="fill-primary max-w-5"
+            />
+          </BarChart>}
+        </>
       )}
     </ResponsiveContainer>
   );
