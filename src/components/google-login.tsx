@@ -9,7 +9,7 @@ type Props = {
 
 const GoogleLogin = ({ text = "Continue with Google", showLogo = true }: Props) => {
   const signInWithGoogle = async () => {
-    await signIn();
+    await signIn("google");
   };
 
   return (
