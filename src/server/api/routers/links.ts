@@ -1,5 +1,9 @@
 import { MandatoryIDSchema } from "~/schemas/common";
-import { CreateShortenLink, ShortenLinkSchema } from "~/schemas/links";
+import {
+  CreateShortenLink,
+  CreateShortenLinkViaSDK,
+  ShortenLinkSchema,
+} from "~/schemas/links";
 import { OrgIDSchema } from "~/schemas/organization";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { nanoid } from "nanoid";
@@ -7,6 +11,7 @@ import { calculateExpirationTime } from "~/server/utils";
 import ratelimit from "~/server/rate-limiter";
 import { TRPCError } from "@trpc/server";
 import { LINKS_PER_PAGE } from "~/constants";
+import { createCaller } from "../root";
 
 export const linksRouter = createTRPCRouter({
   getById: protectedProcedure
@@ -37,9 +42,21 @@ export const linksRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       let conditions = {};
       if (input.linkType === "active") {
-        conditions = { AND: [{OR: [{ expirationTime: { gt: new Date() } }, { expirationTime: null }]}, {isDeleted: false} ]};
+        conditions = {
+          AND: [
+            {
+              OR: [
+                { expirationTime: { gt: new Date() } },
+                { expirationTime: null },
+              ],
+            },
+            { isDeleted: false },
+          ],
+        };
       } else if (input.linkType === "expired") {
-        conditions = { AND: [{ expirationTime: { lt: new Date() } }, { isDeleted: false }] };
+        conditions = {
+          AND: [{ expirationTime: { lt: new Date() } }, { isDeleted: false }],
+        };
       } else if (input.linkType === "deleted") {
         conditions = { isDeleted: true };
       }
@@ -47,7 +64,7 @@ export const linksRouter = createTRPCRouter({
         skip: LINKS_PER_PAGE * (input.page ?? 0),
         take: LINKS_PER_PAGE,
         where: {
-          AND: [{ organizationId: input.orgId},  { ...conditions }]
+          AND: [{ organizationId: input.orgId }, { ...conditions }],
         },
       });
     }),
@@ -67,6 +84,47 @@ export const linksRouter = createTRPCRouter({
         },
       });
     }),
+  createViaSDK: protectedProcedure
+    .input(CreateShortenLinkViaSDK)
+    .mutation(async ({ ctx, input }) => {
+      const apiKey = ctx.headers.get("X-API-KEY") as string;
+
+      const { success } = await ratelimit.limit(apiKey);
+
+      if (!success) {
+        throw new TRPCError({
+          code: "TOO_MANY_REQUESTS",
+          message: "Too many requests. Try after some time",
+        });
+      }
+
+      const trpc = createCaller(ctx);
+      const org = await trpc.organization.getByAPIKey({ apiKey });
+
+      if (!org) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Organization not found",
+        });
+      }
+
+      if (!org.apiKey) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "API key not found",
+        });
+      }
+
+      return ctx.db.links.create({
+        data: {
+          organizationId: org.id,
+          link: input.link,
+          shortLink: nanoid(6),
+          expirationTime: calculateExpirationTime(input.options.expiration),
+        },
+      });
+    }),
+
   expireById: protectedProcedure
     .input(MandatoryIDSchema)
     .mutation(({ ctx, input }) => {

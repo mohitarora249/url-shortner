@@ -1,7 +1,8 @@
 import { organizationRouter } from "~/server/api/routers/organization";
 import { linksRouter } from "~/server/api/routers/links";
-import { createTRPCRouter } from "~/server/api/trpc";
+import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 import { analyticsRouter } from "./routers/analytics";
+import { apiKeyMgmtRouter } from "./routers/api-key-mgmt";
 
 /**
  * This is the primary router for your server.
@@ -11,8 +12,18 @@ import { analyticsRouter } from "./routers/analytics";
 export const appRouter = createTRPCRouter({
   organization: organizationRouter,
   links: linksRouter,
-  analytics: analyticsRouter
+  analytics: analyticsRouter,
+  apiKeyMgmt: apiKeyMgmtRouter,
 });
 
 // export type definition of API
 export type AppRouter = typeof appRouter;
+
+/**
+ * Create a server-side caller for the tRPC API.
+ * @example
+ * const trpc = createCaller(createContext);
+ * const res = await trpc.post.all();
+ *       ^? Post[]
+ */
+export const createCaller = createCallerFactory(appRouter);

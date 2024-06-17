@@ -1,3 +1,3 @@
-import { randomBytes } from 'crypto';
+import { randomUUID } from "crypto";
 
-export const generateKey = () => randomBytes(32);
+export const generateKey = () => randomUUID();

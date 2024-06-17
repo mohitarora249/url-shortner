@@ -11,7 +11,7 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import useCreateLink from "~/hooks/use-create-link";
-import { Loader2, MailIcon } from "lucide-react";
+import { Loader2, MoreVertical } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -19,14 +19,51 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+} from "~/components/ui/dropdown-menu";
+import useClipboard from "~/hooks/common/use-clipboard";
+import { api } from "~/trpc/react";
+import { toast } from "sonner";
 
 const CreateLinkForm = () => {
   const params = useParams();
   const orgId = params.orgId as string;
   const { form, onSubmit, isLoading } = useCreateLink({ orgId });
+  const { copyToClipboard } = useClipboard();
+
+  const { mutate: createApiKey, isPending } = api.apiKeyMgmt.create.useMutation(
+    {
+      onSuccess: async () => {
+        await refetch();
+        toast.success("API key created");
+      },
+      onError: () => {
+        toast.error("Error occurred while creating API key");
+      },
+    },
+  );
+
+  const { data: organization, refetch } = api.organization.getById.useQuery(
+    {
+      id: orgId,
+    },
+    { enabled: !!orgId },
+  );
+
+  const createApiKeyHdlr = () => {
+    createApiKey({ orgId });
+  };
+
+  const copyApiKey = () => {
+    copyToClipboard("" + organization.apiKey);
+  };
 
   return (
-    <div className="w-full ">
+    <div className="flex w-full space-x-4">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -75,6 +112,27 @@ const CreateLinkForm = () => {
           </Button>
         </form>
       </Form>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon">
+            <MoreVertical className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem
+            onClick={createApiKeyHdlr}
+            disabled={isPending || !!organization?.apiKey}
+          >
+            Create API Key
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            disabled={isPending || !organization?.apiKey}
+            onClick={copyApiKey}
+          >
+            Copy API Key
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };

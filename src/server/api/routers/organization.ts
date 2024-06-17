@@ -1,38 +1,43 @@
 import { MandatoryIDSchema } from "~/schemas/common";
+import { APIKeySchema } from "~/schemas/links";
 import { CreateOrgSchema } from "~/schemas/organization";
-import {
-  createTRPCRouter,
-  protectedProcedure,
-} from "~/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 export const organizationRouter = createTRPCRouter({
-  getAll: protectedProcedure
-    .query(({ ctx }) => {
-      return ctx.db.organization.findMany({
-        where: {
-          createdById: ctx.session?.user.id,
-          isDeleted: false
-        },
-      });
-    }),
+  getAll: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.organization.findMany({
+      where: {
+        createdById: ctx.session?.user.id,
+        isDeleted: false,
+      },
+    });
+  }),
   getById: protectedProcedure
     .input(MandatoryIDSchema)
     .query(({ ctx, input }) => {
       return ctx.db.organization.findFirst({
         where: {
           id: input.id,
-          createdById: ctx.session.user.id
+          createdById: ctx.session.user.id,
         },
       });
     }),
-  getAllUserOrgById: protectedProcedure
-    .query(({ ctx }) => {
-      return ctx.db.organization.findMany({
+  getByAPIKey: protectedProcedure
+    .input(APIKeySchema)
+    .query(({ ctx, input }) => {
+      return ctx.db.organization.findFirst({
         where: {
-          createdById: ctx.session.user.id
+          apiKey: input.apiKey,
         },
       });
     }),
+  getAllUserOrgById: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.organization.findMany({
+      where: {
+        createdById: ctx.session.user.id,
+      },
+    });
+  }),
   create: protectedProcedure
     .input(CreateOrgSchema)
     .mutation(({ ctx, input }) => {
@@ -49,7 +54,7 @@ export const organizationRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.db.organization.update({
         where: { id: input.id, createdById: ctx.session.user.id },
-        data: { isDeleted: true }
+        data: { isDeleted: true },
       });
     }),
 });

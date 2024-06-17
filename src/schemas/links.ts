@@ -16,4 +16,15 @@ export const CreateShortenLink = z.object({
   expiration: ExpirationEnum,
 });
 
+export const CreateShortenLinkViaSDK = z.object({
+  link: z
+    .string()
+    .url({ message: "Must be a valid url. e.g. https://www.linklift.in" }),
+  options: z.object({
+    expiration: ExpirationEnum,
+  }),
+});
+
 export const ShortenLinkSchema = z.object({ shortLink: z.string().min(1) });
+
+export const APIKeySchema = z.object({ apiKey: z.string() });
