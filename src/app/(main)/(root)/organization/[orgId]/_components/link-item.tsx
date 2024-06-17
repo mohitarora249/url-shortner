@@ -12,15 +12,6 @@ import {
 import { env } from "~/env";
 import { api } from "~/trpc/react";
 import { LinkType } from "~/types";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "~/components/ui/hover-card";
-import Image from "next/image";
-import { useState } from "react";
-import { Skeleton } from "~/components/ui/skeleton";
-import { generateQRCode } from "~/lib/qr-code";
 import { format } from "date-fns";
 import useClipboard from "~/hooks/common/use-clipboard";
 

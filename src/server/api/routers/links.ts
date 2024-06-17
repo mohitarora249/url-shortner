@@ -87,7 +87,7 @@ export const linksRouter = createTRPCRouter({
   createViaSDK: protectedProcedure
     .input(CreateShortenLinkViaSDK)
     .mutation(async ({ ctx, input }) => {
-      const apiKey = ctx.headers.get("X-API-KEY") as string;
+      const apiKey = ctx.headers.get("X-API-KEY")! as string;
 
       const { success } = await ratelimit.limit(apiKey);
 
