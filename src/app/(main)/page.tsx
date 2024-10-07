@@ -22,7 +22,7 @@ const LandingPage = () => {
                   your online presence with LinkSnip.
                 </p>
               </div>
-              <div className="w-full max-w-sm space-y-2">
+              {/* <div className="w-full max-w-sm space-y-2">
                 <form className="flex space-x-2">
                   <Input
                     className="max-w-lg flex-1"
@@ -34,7 +34,7 @@ const LandingPage = () => {
                 <p className="text-xs text-gray-500 dark:text-gray-400">
                   No sign up required. Shorten your first link for free!
                 </p>
-              </div>
+              </div> */}
             </div>
           </div>
         </section>
