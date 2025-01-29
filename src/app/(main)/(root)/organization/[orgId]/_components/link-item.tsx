@@ -1,17 +1,20 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { type Links } from "@prisma/client"
-import { ExternalLink, Trash2, Ban, UndoDot, Copy } from 'lucide-react'
+import type { Links } from "@prisma/client"
+import { ExternalLink, Trash2, Ban, UndoDot, Copy, QrCode, Loader } from "lucide-react"
 import { Badge } from "~/components/ui/badge"
 import { toast } from "sonner"
 import { Button } from "~/components/ui/button"
 import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip"
+import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover"
 import { env } from "~/env"
 import { api } from "~/trpc/react"
-import { LinkType } from "~/types"
+import type { LinkType } from "~/types"
 import { format } from "date-fns"
 import useClipboard from "~/hooks/common/use-clipboard"
+import { generateQRCode } from "~/lib/qr-code"
 
 type Props = Links & { linkType: LinkType }
 
@@ -20,6 +23,7 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
   const url = `${env.NEXT_PUBLIC_BASE_URL}/${shortLink}`
   const onExternalLinkClickHandler = () => window.open(url)
   const { links } = api.useUtils()
+  const [qrCode, setQrCode] = useState<string | null>(null)
 
   const { mutate: deleteLinkById } = api.links.deleteById.useMutation({
     onSuccess: () => {
@@ -47,6 +51,18 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
   const onBanLinkClickHandler = () => expireLinkById({ id })
   const markLinkActiveFromDeletedById = () => activateLinkById({ id })
   const copyLinkHandler = () => copyToClipboard(url)
+
+  useEffect(() => {
+    const generateCode = async () => {
+      try {
+        const code = await generateQRCode(url)
+        setQrCode(code)
+      } catch (error) {
+        console.error("Error generating QR code:", error)
+      }
+    }
+    generateCode()
+  }, [url])
 
   return (
     <motion.div
@@ -77,6 +93,27 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
               <p>Copy link</p>
             </TooltipContent>
           </Tooltip>
+          <Popover>
+            <TooltipTrigger asChild>
+              <PopoverTrigger asChild>
+                <Button variant="ghost" size="sm" className="rounded-full">
+                  <QrCode className="h-4 w-4" />
+                </Button>
+              </PopoverTrigger>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Show QR Code</p>
+            </TooltipContent>
+            <PopoverContent className="w-fit">
+              {qrCode ? (
+                <img src={qrCode || "/placeholder.svg"} alt="QR Code" className="w-48 h-48" />
+              ) : (
+                <div className="w-48 h-48 flex items-center justify-center">
+                  <Loader className="h-8 w-8 animate-spin text-gray-500" />
+                </div>
+              )}
+            </PopoverContent>
+          </Popover>
           {linkType !== "deleted" && linkType !== "expired" && (
             <Tooltip>
               <TooltipTrigger>
@@ -132,3 +169,4 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
 }
 
 export default LinkItem
+

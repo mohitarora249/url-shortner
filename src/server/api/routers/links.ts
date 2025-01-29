@@ -66,6 +66,9 @@ export const linksRouter = createTRPCRouter({
         where: {
           AND: [{ organizationId: input.orgId }, { ...conditions }],
         },
+        orderBy: {
+          createdAt: "desc",
+        }
       });
     }),
   create: protectedProcedure
