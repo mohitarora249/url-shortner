@@ -15,7 +15,7 @@ const LandingPage = () => {
       <main className="flex-1">
         <Hero />
         <Features />
-        <Testimonials />
+        {/* <Testimonials /> */}
         <CallToAction />
       </main>
       <Footer />
@@ -100,42 +100,42 @@ const Features = () => (
   </section>
 );
 
-const Testimonials = () => (
-  <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
-    <div className="container px-4 md:px-6">
-      <motion.h2
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="mb-12 text-center text-3xl font-bold tracking-tighter sm:text-5xl"
-      >
-        What Our Users Say
-      </motion.h2>
-      <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
-        {[
-          { name: "Alex Johnson", role: "Marketing Manager", quote: "LinkLift has revolutionized our marketing campaigns. The analytics are incredibly insightful!" },
-          { name: "Sarah Lee", role: "Content Creator", quote: "I love how easy it is to create custom short links. It's made my content sharing so much more professional." },
-          { name: "Mike Brown", role: "E-commerce Owner", quote: "The API integration was a game-changer for our online store. Highly recommended!" },
-        ].map((testimonial, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            className="flex flex-col items-center space-y-4 text-center"
-          >
-            <div className="h-20 w-20 rounded-full bg-gray-200 dark:bg-gray-700" />
-            <div>
-              <h3 className="text-xl font-bold">{testimonial.name}</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400">{testimonial.role}</p>
-            </div>
-            <p className="text-gray-600 dark:text-gray-300">"{testimonial.quote}"</p>
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  </section>
-);
+// const Testimonials = () => (
+//   <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
+//     <div className="container px-4 md:px-6">
+//       <motion.h2
+//         initial={{ opacity: 0, y: 20 }}
+//         animate={{ opacity: 1, y: 0 }}
+//         transition={{ duration: 0.5 }}
+//         className="mb-12 text-center text-3xl font-bold tracking-tighter sm:text-5xl"
+//       >
+//         What Our Users Say
+//       </motion.h2>
+//       <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
+//         {[
+//           { name: "Alex Johnson", role: "Marketing Manager", quote: "LinkLift has revolutionized our marketing campaigns. The analytics are incredibly insightful!" },
+//           { name: "Sarah Lee", role: "Content Creator", quote: "I love how easy it is to create custom short links. It&apos;s made my content sharing so much more professional." },
+//           { name: "Mike Brown", role: "E-commerce Owner", quote: "The API integration was a game-changer for our online store. Highly recommended!" },
+//         ].map((testimonial, index) => (
+//           <motion.div
+//             key={index}
+//             initial={{ opacity: 0, y: 20 }}
+//             animate={{ opacity: 1, y: 0 }}
+//             transition={{ duration: 0.5, delay: index * 0.1 }}
+//             className="flex flex-col items-center space-y-4 text-center"
+//           >
+//             <div className="h-20 w-20 rounded-full bg-gray-200 dark:bg-gray-700" />
+//             <div>
+//               <h3 className="text-xl font-bold">{testimonial.name}</h3>
+//               <p className="text-sm text-gray-500 dark:text-gray-400">{testimonial.role}</p>
+//             </div>
+//             <p className="text-gray-600 dark:text-gray-300">"{testimonial.quote}"</p>
+//           </motion.div>
+//         ))}
+//       </div>
+//     </div>
+//   </section>
+// );
 
 const CallToAction = () => (
   <section className="w-full py-12 md:py-24 lg:py-32" id="contact">
