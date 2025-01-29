@@ -7,4 +7,10 @@ const ratelimit = new Ratelimit({
   limiter: Ratelimit.slidingWindow(MAX_NUMBER_OF_REQ, TEN_SECONDS),
 });
 
+export const publicRatelimit = new Ratelimit({
+  redis: redis,
+  limiter: Ratelimit.slidingWindow(2, "15 m"),
+});
+
 export default ratelimit;
+

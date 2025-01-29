@@ -7,6 +7,8 @@ import { Link2, Clock, BarChart2, Lock, Zap, Globe } from 'lucide-react';
 import RootNav from "./_components/root-nav";
 import GoogleLogin from "~/components/google-login";
 import { motion } from "framer-motion";
+import CreateFreeShorternURLForm from "./_components/create-free-shortern-url-form";
+import ListMyPublicURLs from "./_components/list-my-public-urls";
 
 const LandingPage = () => {
   return (
@@ -46,18 +48,9 @@ const Hero = () => (
           transition={{ duration: 0.5, delay: 0.2 }}
           className="w-full max-w-sm space-y-2"
         >
-          {/* <form className="flex space-x-2">
-            <Input
-              className="max-w-lg flex-1"
-              placeholder="Enter your long URL"
-              type="url"
-            />
-            <Button type="submit">Shorten</Button>
-          </form>
-          <p className="text-xs text-gray-500 dark:text-gray-400">
-            No sign up required. Shorten your first link for free!
-          </p> */}
+          <CreateFreeShorternURLForm />
         </motion.div>
+        <ListMyPublicURLs />
       </div>
     </div>
   </section>

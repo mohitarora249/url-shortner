@@ -38,6 +38,18 @@ model Links {
     @@index([shortLink])
 }
 
+model PublicLinks {
+    id             String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    link           String
+    shortLink      String
+    expirationTime DateTime?
+    createdByIp String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([shortLink])
+}
+
 // Necessary for Next auth
 model Account {
     id                String  @id @default(cuid())

@@ -3,6 +3,7 @@ import { linksRouter } from "~/server/api/routers/links";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 import { analyticsRouter } from "./routers/analytics";
 import { apiKeyMgmtRouter } from "./routers/api-key-mgmt";
+import { publicLinkRouter } from "./routers/public-link";
 
 /**
  * This is the primary router for your server.
@@ -14,6 +15,7 @@ export const appRouter = createTRPCRouter({
   links: linksRouter,
   analytics: analyticsRouter,
   apiKeyMgmt: apiKeyMgmtRouter,
+  publicLink: publicLinkRouter
 });
 
 // export type definition of API
