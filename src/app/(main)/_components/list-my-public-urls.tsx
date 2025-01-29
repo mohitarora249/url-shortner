@@ -20,7 +20,7 @@ const ListMyPublicURLs = () => {
             className="w-full max-w-sm space-y-2"
         >
             {data?.map((link) => (
-                <ListItem link={link} />
+                <ListItem key={link.id} link={link} />
             ))}
         </motion.div>
     );
