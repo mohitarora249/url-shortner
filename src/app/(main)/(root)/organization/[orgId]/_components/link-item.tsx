@@ -1,75 +1,75 @@
-"use client";
-import { Links } from "@prisma/client";
-import { ExternalLink, Trash2, Ban, UndoDot, Copy } from "lucide-react";
-import { Badge } from "~/components/ui/badge";
-import { toast } from "sonner";
-import { Button } from "~/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "~/components/ui/tooltip";
-import { env } from "~/env";
-import { api } from "~/trpc/react";
-import { LinkType } from "~/types";
-import { format } from "date-fns";
-import useClipboard from "~/hooks/common/use-clipboard";
+"use client"
 
-type Props = Links & { linkType: LinkType };
+import { motion, AnimatePresence } from "framer-motion"
+import { type Links } from "@prisma/client"
+import { ExternalLink, Trash2, Ban, UndoDot, Copy } from 'lucide-react'
+import { Badge } from "~/components/ui/badge"
+import { toast } from "sonner"
+import { Button } from "~/components/ui/button"
+import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip"
+import { env } from "~/env"
+import { api } from "~/trpc/react"
+import { LinkType } from "~/types"
+import { format } from "date-fns"
+import useClipboard from "~/hooks/common/use-clipboard"
+
+type Props = Links & { linkType: LinkType }
 
 const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
-  const { copyToClipboard } = useClipboard();
-  const url = `${env.NEXT_PUBLIC_BASE_URL}/${shortLink}`;
-  const onExternalLinkClickHandler = () => window.open(url);
-  const { links } = api.useUtils();
+  const { copyToClipboard } = useClipboard()
+  const url = `${env.NEXT_PUBLIC_BASE_URL}/${shortLink}`
+  const onExternalLinkClickHandler = () => window.open(url)
+  const { links } = api.useUtils()
 
   const { mutate: deleteLinkById } = api.links.deleteById.useMutation({
     onSuccess: () => {
-      toast.success("Link deleted");
-      links.invalidate();
+      toast.success("Link deleted")
+      links.invalidate()
     },
     onError: () => toast.error("Error occurred while deleting link"),
-  });
+  })
   const { mutate: expireLinkById } = api.links.expireById.useMutation({
     onSuccess: () => {
-      toast.success("Link expired");
-      links.invalidate();
+      toast.success("Link expired")
+      links.invalidate()
     },
     onError: () => toast.error("Error occurred while expiring link"),
-  });
-  const { mutate: activateLinkById } =
-    api.links.markLinkActiveFromDeletedById.useMutation({
-      onSuccess: () => {
-        toast.success("Link activated");
-        links.invalidate();
-      },
-      onError: () => toast.error("Error occurred while activating link"),
-    });
+  })
+  const { mutate: activateLinkById } = api.links.markLinkActiveFromDeletedById.useMutation({
+    onSuccess: () => {
+      toast.success("Link activated")
+      links.invalidate()
+    },
+    onError: () => toast.error("Error occurred while activating link"),
+  })
 
-  const deleteLinkHandler = () => deleteLinkById({ id });
-  const onBanLinkClickHandler = () => expireLinkById({ id });
-  const markLinkActiveFromDeletedById = () => activateLinkById({ id });
-  const copyLinkHandler = () => copyToClipboard(url);
+  const deleteLinkHandler = () => deleteLinkById({ id })
+  const onBanLinkClickHandler = () => expireLinkById({ id })
+  const markLinkActiveFromDeletedById = () => activateLinkById({ id })
+  const copyLinkHandler = () => copyToClipboard(url)
 
   return (
-    <div
-      key={id}
-      className="flex w-full cursor-pointer flex-col rounded-md pl-2 hover:bg-gray-50"
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.3 }}
+      className="mb-4 w-full rounded-lg bg-white p-4 shadow-md transition-all hover:shadow-lg"
     >
-      <div className="flex items-center">
-        <div className="flex w-full flex-col">
-          <div className="font-bold">{url}</div>
-          <div className="text-sm">{link}</div>
+      <div className="flex items-center justify-between">
+        <div className="flex flex-col">
+          <div className="font-bold text-blue-600">{url}</div>
+          <div className="text-sm text-gray-600">{link}</div>
           {expirationTime && linkType === "active" && (
-            <Badge className="my-[2px] w-fit" variant="outline">
+            <Badge className="my-2 w-fit" variant="outline">
               Expires at : {format(expirationTime, "dd-MM-yyyy HH:mm:ss")}
             </Badge>
           )}
         </div>
-        <div className="flex w-full justify-end space-x-2">
+        <div className="flex space-x-2">
           <Tooltip>
             <TooltipTrigger>
-              <Button onClick={copyLinkHandler} variant="ghost">
+              <Button onClick={copyLinkHandler} variant="ghost" size="sm" className="rounded-full">
                 <Copy className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
@@ -80,7 +80,7 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
           {linkType !== "deleted" && linkType !== "expired" && (
             <Tooltip>
               <TooltipTrigger>
-                <Button onClick={deleteLinkHandler} variant="ghost">
+                <Button onClick={deleteLinkHandler} variant="ghost" size="sm" className="rounded-full">
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
@@ -92,12 +92,12 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
           {linkType === "deleted" && (
             <Tooltip>
               <TooltipTrigger>
-                <Button onClick={markLinkActiveFromDeletedById} variant="ghost">
-                  <UndoDot className="h-3 w-3 md:h-4 md:w-4" />
+                <Button onClick={markLinkActiveFromDeletedById} variant="ghost" size="sm" className="rounded-full">
+                  <UndoDot className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                <p>Active link</p>
+                <p>Activate link</p>
               </TooltipContent>
             </Tooltip>
           )}
@@ -105,7 +105,7 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
             <>
               <Tooltip>
                 <TooltipTrigger>
-                  <Button onClick={onBanLinkClickHandler} variant="ghost">
+                  <Button onClick={onBanLinkClickHandler} variant="ghost" size="sm" className="rounded-full">
                     <Ban className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
@@ -115,7 +115,7 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
               </Tooltip>
               <Tooltip>
                 <TooltipTrigger>
-                  <Button onClick={onExternalLinkClickHandler} variant="ghost">
+                  <Button onClick={onExternalLinkClickHandler} variant="ghost" size="sm" className="rounded-full">
                     <ExternalLink className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
@@ -127,8 +127,8 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
           )}
         </div>
       </div>
-    </div>
-  );
-};
+    </motion.div>
+  )
+}
 
-export default LinkItem;
+export default LinkItem

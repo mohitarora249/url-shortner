@@ -1,40 +1,53 @@
-"use client";
+"use client"
 
-import { useParams } from "next/navigation";
-import { api } from "~/trpc/react";
-import LinkItem from "./link-item";
-import { LinkType } from "~/types";
-import { Skeleton } from "~/components/ui/skeleton";
-import LinkListSkeleton from "./link-list-skeleton";
+import { motion, AnimatePresence } from "framer-motion"
+import { useParams } from "next/navigation"
+import { api } from "~/trpc/react"
+import LinkItem from "./link-item"
+import { LinkType } from "~/types"
+import LinkListSkeleton from "./link-list-skeleton"
+
 type Props = {
-  linkType?: LinkType;
-};
+  linkType?: LinkType
+}
 
 const LinksList = ({ linkType = "active" }: Props) => {
-  const params = useParams();
-  const orgId = params.orgId as string;
+  const params = useParams()
+  const orgId = params.orgId as string
 
-  const { data, isFetching, isFetched } =
-    api.links.getAllAvailableLinksByOrgId.useQuery(
-      { orgId, linkType, page: 0 },
-      { enabled: !!orgId },
-    );
+  const { data, isFetching, isFetched } = api.links.getAllAvailableLinksByOrgId.useQuery(
+    { orgId, linkType, page: 0 },
+    { enabled: !!orgId }
+  )
 
   return (
-    <div className="h-full">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      className="h-full"
+    >
       {isFetching && !isFetched && <LinkListSkeleton />}
       {data?.length === 0 && (
-        <div className="mt-4 flex  justify-center">No links available</div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mt-4 flex justify-center text-gray-500"
+        >
+          No links available
+        </motion.div>
       )}
       {isFetched && data && (
-        <div className="flex flex-col p-4 pt-0">
+        <AnimatePresence>
           {data.map((item) => (
-            <LinkItem linkType={linkType} key={item.id} {...item} />
+            <LinkItem key={item.id} linkType={linkType} {...item} />
           ))}
-        </div>
+        </AnimatePresence>
       )}
-    </div>
-  );
-};
+    </motion.div>
+  )
+}
 
-export default LinksList;
+export default LinksList
