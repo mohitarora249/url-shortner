@@ -81,7 +81,7 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
             </div>
           )}
         </div>
-        <div className="flex-grow">
+        <div className="flex-grow justify-between">
           <div className="flex flex-col">
             <div className="font-bold text-blue-600">{url}</div>
             <div className="text-sm text-gray-600">{link}</div>
