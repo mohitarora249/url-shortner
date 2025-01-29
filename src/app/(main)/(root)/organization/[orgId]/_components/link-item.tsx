@@ -74,9 +74,9 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
       <div className="flex items-start space-x-4">
         <div className="flex-shrink-0">
           {qrCode ? (
-            <img src={qrCode || "/placeholder.svg"} alt="QR Code" className="w-24 h-24" />
+            <img src={qrCode} alt="QR Code" className="w-12 h-12" />
           ) : (
-            <div className="w-24 h-24 flex items-center justify-center bg-gray-100 rounded-md">
+            <div className="w-12 h-12 flex items-center justify-center bg-gray-100 rounded-md">
               <Loader className="h-8 w-8 animate-spin text-gray-500" />
             </div>
           )}
@@ -86,12 +86,12 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
             <div className="font-bold text-blue-600">{url}</div>
             <div className="text-sm text-gray-600">{link}</div>
             {expirationTime && linkType === "active" && (
-              <Badge className="my-2 w-fit" variant="outline">
+              <Badge className="my-1 w-fit" variant="outline">
                 Expires at : {format(expirationTime, "dd-MM-yyyy HH:mm:ss")}
               </Badge>
             )}
           </div>
-          <div className="flex space-x-2 mt-2">
+          <div className="flex space-x-2">
             <Tooltip>
               <TooltipTrigger>
                 <Button onClick={copyLinkHandler} variant="ghost" size="sm" className="rounded-full">
