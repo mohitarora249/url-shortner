@@ -3,12 +3,11 @@
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import type { Links } from "@prisma/client"
-import { ExternalLink, Trash2, Ban, UndoDot, Copy, QrCode, Loader } from "lucide-react"
+import { ExternalLink, Trash2, Ban, UndoDot, Copy, Loader } from 'lucide-react'
 import { Badge } from "~/components/ui/badge"
 import { toast } from "sonner"
 import { Button } from "~/components/ui/button"
 import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip"
-import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover"
 import { env } from "~/env"
 import { api } from "~/trpc/react"
 import type { LinkType } from "~/types"
@@ -72,96 +71,86 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
       transition={{ duration: 0.3 }}
       className="mb-4 w-full rounded-lg bg-white p-4 shadow-md transition-all hover:shadow-lg"
     >
-      <div className="flex items-center justify-between">
-        <div className="flex flex-col">
-          <div className="font-bold text-blue-600">{url}</div>
-          <div className="text-sm text-gray-600">{link}</div>
-          {expirationTime && linkType === "active" && (
-            <Badge className="my-2 w-fit" variant="outline">
-              Expires at : {format(expirationTime, "dd-MM-yyyy HH:mm:ss")}
-            </Badge>
+      <div className="flex items-start space-x-4">
+        <div className="flex-shrink-0">
+          {qrCode ? (
+            <img src={qrCode || "/placeholder.svg"} alt="QR Code" className="w-24 h-24" />
+          ) : (
+            <div className="w-24 h-24 flex items-center justify-center bg-gray-100 rounded-md">
+              <Loader className="h-8 w-8 animate-spin text-gray-500" />
+            </div>
           )}
         </div>
-        <div className="flex space-x-2">
-          <Tooltip>
-            <TooltipTrigger>
-              <Button onClick={copyLinkHandler} variant="ghost" size="sm" className="rounded-full">
-                <Copy className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Copy link</p>
-            </TooltipContent>
-          </Tooltip>
-          <Popover>
-            <TooltipTrigger asChild>
-              <PopoverTrigger asChild>
-                <Button variant="ghost" size="sm" className="rounded-full">
-                  <QrCode className="h-4 w-4" />
-                </Button>
-              </PopoverTrigger>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Show QR Code</p>
-            </TooltipContent>
-            <PopoverContent className="w-fit">
-              {qrCode ? (
-                <img src={qrCode || "/placeholder.svg"} alt="QR Code" className="w-48 h-48" />
-              ) : (
-                <div className="w-48 h-48 flex items-center justify-center">
-                  <Loader className="h-8 w-8 animate-spin text-gray-500" />
-                </div>
-              )}
-            </PopoverContent>
-          </Popover>
-          {linkType !== "deleted" && linkType !== "expired" && (
+        <div className="flex-grow">
+          <div className="flex flex-col">
+            <div className="font-bold text-blue-600">{url}</div>
+            <div className="text-sm text-gray-600">{link}</div>
+            {expirationTime && linkType === "active" && (
+              <Badge className="my-2 w-fit" variant="outline">
+                Expires at : {format(expirationTime, "dd-MM-yyyy HH:mm:ss")}
+              </Badge>
+            )}
+          </div>
+          <div className="flex space-x-2 mt-2">
             <Tooltip>
               <TooltipTrigger>
-                <Button onClick={deleteLinkHandler} variant="ghost" size="sm" className="rounded-full">
-                  <Trash2 className="h-4 w-4" />
+                <Button onClick={copyLinkHandler} variant="ghost" size="sm" className="rounded-full">
+                  <Copy className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Delete link</p>
+                <p>Copy link</p>
               </TooltipContent>
             </Tooltip>
-          )}
-          {linkType === "deleted" && (
-            <Tooltip>
-              <TooltipTrigger>
-                <Button onClick={markLinkActiveFromDeletedById} variant="ghost" size="sm" className="rounded-full">
-                  <UndoDot className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                <p>Activate link</p>
-              </TooltipContent>
-            </Tooltip>
-          )}
-          {linkType === "active" && (
-            <>
+            {linkType !== "deleted" && linkType !== "expired" && (
               <Tooltip>
                 <TooltipTrigger>
-                  <Button onClick={onBanLinkClickHandler} variant="ghost" size="sm" className="rounded-full">
-                    <Ban className="h-4 w-4" />
+                  <Button onClick={deleteLinkHandler} variant="ghost" size="sm" className="rounded-full">
+                    <Trash2 className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Expire link</p>
+                  <p>Delete link</p>
                 </TooltipContent>
               </Tooltip>
+            )}
+            {linkType === "deleted" && (
               <Tooltip>
                 <TooltipTrigger>
-                  <Button onClick={onExternalLinkClickHandler} variant="ghost" size="sm" className="rounded-full">
-                    <ExternalLink className="h-4 w-4" />
+                  <Button onClick={markLinkActiveFromDeletedById} variant="ghost" size="sm" className="rounded-full">
+                    <UndoDot className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>
-                  <p>Open link</p>
+                <TooltipContent side="bottom">
+                  <p>Activate link</p>
                 </TooltipContent>
               </Tooltip>
-            </>
-          )}
+            )}
+            {linkType === "active" && (
+              <>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Button onClick={onBanLinkClickHandler} variant="ghost" size="sm" className="rounded-full">
+                      <Ban className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Expire link</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Button onClick={onExternalLinkClickHandler} variant="ghost" size="sm" className="rounded-full">
+                      <ExternalLink className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Open link</p>
+                  </TooltipContent>
+                </Tooltip>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </motion.div>
@@ -169,4 +158,3 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
 }
 
 export default LinkItem
-
