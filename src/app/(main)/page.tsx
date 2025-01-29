@@ -46,7 +46,7 @@ const Hero = () => (
           transition={{ duration: 0.5, delay: 0.2 }}
           className="w-full max-w-sm space-y-2"
         >
-          <form className="flex space-x-2">
+          {/* <form className="flex space-x-2">
             <Input
               className="max-w-lg flex-1"
               placeholder="Enter your long URL"
@@ -56,7 +56,7 @@ const Hero = () => (
           </form>
           <p className="text-xs text-gray-500 dark:text-gray-400">
             No sign up required. Shorten your first link for free!
-          </p>
+          </p> */}
         </motion.div>
       </div>
     </div>
@@ -176,7 +176,7 @@ const Footer = () => (
       <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
         <div className="text-center md:text-left">
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            © 2023 LinkLift. All rights reserved.
+            © 2025 LinkLift. All rights reserved.
           </p>
         </div>
         <nav className="flex gap-4">
