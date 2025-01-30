@@ -76,9 +76,9 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
-      className="mb-4 w-full rounded-lg bg-white p-4 shadow-md transition-all hover:shadow-lg"
+      className="mb-4 w-full rounded-lg bg-white p-1 shadow-md transition-all hover:shadow-lg"
     >
-      <div className="flex items-start space-x-4">
+      <div className="flex items-start space-x-2">
         <div className="flex-shrink-0">
           {qrCode ? (
             <img
@@ -125,7 +125,7 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
           <div className="flex space-x-2">
             <Tooltip>
               <TooltipTrigger>
-                <Button onClick={copyLinkHandler} variant="ghost" size="sm" className="rounded-full">
+                <Button onClick={copyLinkHandler} variant="ghost" size="icon" className="rounded-full">
                   <Copy className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
@@ -136,7 +136,7 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
             {linkType !== "deleted" && linkType !== "expired" && (
               <Tooltip>
                 <TooltipTrigger>
-                  <Button onClick={deleteLinkHandler} variant="ghost" size="sm" className="rounded-full">
+                  <Button onClick={deleteLinkHandler} variant="ghost" size="icon" className="rounded-full">
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
@@ -148,7 +148,7 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
             {linkType === "deleted" && (
               <Tooltip>
                 <TooltipTrigger>
-                  <Button onClick={markLinkActiveFromDeletedById} variant="ghost" size="sm" className="rounded-full">
+                  <Button onClick={markLinkActiveFromDeletedById} variant="ghost" size="icon" className="rounded-full">
                     <UndoDot className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
@@ -161,7 +161,7 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
               <>
                 <Tooltip>
                   <TooltipTrigger>
-                    <Button onClick={onBanLinkClickHandler} variant="ghost" size="sm" className="rounded-full">
+                    <Button onClick={onBanLinkClickHandler} variant="ghost" size="icon" className="rounded-full">
                       <Ban className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
@@ -171,7 +171,7 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
                 </Tooltip>
                 <Tooltip>
                   <TooltipTrigger>
-                    <Button onClick={onExternalLinkClickHandler} variant="ghost" size="sm" className="rounded-full">
+                    <Button onClick={onExternalLinkClickHandler} variant="ghost" size="icon" className="rounded-full">
                       <ExternalLink className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
