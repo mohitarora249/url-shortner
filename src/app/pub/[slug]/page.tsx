@@ -38,11 +38,6 @@ const RedirectionPage = async ({ params }: Props) => {
       <NotFound message="Looks like the link you are trying to access is expired" />
     );
 
-  if (data && data.isDeleted)
-    return (
-      <NotFound message="Looks like the link you are trying to access is removed from our system" />
-    );
-
   if (data && data.link) redirect(data.link);
 
   return <div className="h-screen" />;

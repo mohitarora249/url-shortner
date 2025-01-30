@@ -10,8 +10,16 @@ import Link from "next/link";
 import { ClientJS } from "clientjs";
 
 const ListMyPublicURLs = () => {
+    const [fingerprint, setFingerprint] = useState<string | null>(null);
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const client = new ClientJS();
+            setFingerprint(client.getFingerprint().toString());
+        }
+    }, []);
+
     const { data, isFetching } = api.publicLink.getAllMyLinks.useQuery({
-        i: new ClientJS().getFingerprint().toString()
+        i: fingerprint
     });
 
     if (isFetching) return null;
