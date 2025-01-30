@@ -16,8 +16,8 @@ export function LinkPreviewCard({ url }: Props) {
 
     return (
         <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
-            <Card className="overflow-hidden w-24 h-24">
-                {isFetching ? <Skeleton className="w-24 h-24 rounded" /> : null}
+            <Card className="overflow-hidden w-48 h-48">
+                {isFetching ? <Skeleton className="w-48 h-48 rounded" /> : null}
                 {data && (
                     <div className="flex gap-3">
                         {data.image && (
