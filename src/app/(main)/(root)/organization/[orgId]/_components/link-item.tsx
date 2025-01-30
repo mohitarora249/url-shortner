@@ -14,15 +14,17 @@ import type { LinkType } from "~/types"
 import { format } from "date-fns"
 import useClipboard from "~/hooks/common/use-clipboard"
 import { generateQRCode } from "~/lib/qr-code"
+import { LinkPreviewCard } from "./link-preview-card"
 
 type Props = Links & { linkType: LinkType }
 
 const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
-  const { copyToClipboard } = useClipboard()
+  const { copyToClipboard } = useClipboard();
   const url = `${env.NEXT_PUBLIC_BASE_URL}/${shortLink}`
+  const [isHovering, setIsHovering] = useState(false);
+  const [qrCode, setQrCode] = useState<string | null>(null)
   const onExternalLinkClickHandler = () => window.open(url)
   const { links } = api.useUtils()
-  const [qrCode, setQrCode] = useState<string | null>(null)
 
   const { mutate: deleteLinkById } = api.links.deleteById.useMutation({
     onSuccess: () => {
@@ -74,7 +76,11 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
       <div className="flex items-start space-x-4">
         <div className="flex-shrink-0">
           {qrCode ? (
-            <img src={qrCode} alt="QR Code" className="w-12 h-12" />
+            <img
+              src={qrCode}
+              alt="QR Code"
+              className="w-12 h-12"
+            />
           ) : (
             <div className="w-12 h-12 flex items-center justify-center bg-gray-100 rounded-md">
               <Loader className="h-8 w-8 animate-spin text-gray-500" />
@@ -82,8 +88,27 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
           )}
         </div>
         <div className="flex-grow justify-between">
-          <div className="flex flex-col">
-            <div className="font-bold text-blue-600">{url}</div>
+          <div className="flex flex-col relative">
+            <div
+              className="font-bold text-blue-600"
+              onMouseEnter={() => setIsHovering(true)}
+              onMouseLeave={() => setIsHovering(false)}
+            >
+              {url}
+            </div>
+            <AnimatePresence>
+              {isHovering && (
+                <motion.div
+                  className="absolute z-10 left-0 mt-2 w-72"
+                  initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <LinkPreviewCard url={url} />
+                </motion.div>
+              )}
+            </AnimatePresence>
             <div className="text-sm text-gray-600">{link}</div>
             {expirationTime && linkType === "active" && (
               <Badge className="my-1 w-fit" variant="outline">
