@@ -8,6 +8,7 @@ import { Button } from "~/components/ui/button";
 import { Form } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { api } from "~/trpc/react";
+import { ClientJS } from "clientjs";
 
 
 const CreateFreeShorternURLForm = () => {
@@ -33,12 +34,12 @@ const CreateFreeShorternURLForm = () => {
         },
         onError: (err) => {
             toast.error(err.message)
-        },
+        }
     });
 
     const onSubmit = (values: z.infer<typeof formSchema>) => {
         form.reset();
-        mutate({ link: values.link });
+        mutate({ link: values.link, i: new ClientJS().getFingerprint().toString() });
     };
 
 

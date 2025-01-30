@@ -7,9 +7,12 @@ import { generateQRCode } from "~/lib/qr-code";
 import { env } from "~/env";
 import { Loader } from "lucide-react";
 import Link from "next/link";
+import { ClientJS } from "clientjs";
 
 const ListMyPublicURLs = () => {
-    const { data, isFetching } = api.publicLink.getAllMyLinks.useQuery();
+    const { data, isFetching } = api.publicLink.getAllMyLinks.useQuery({
+        i: new ClientJS().getFingerprint().toString()
+    });
     console.log("data : ", data)
     if (isFetching) return null;
     return (

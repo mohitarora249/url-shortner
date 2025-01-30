@@ -12,13 +12,11 @@ export const publicLinkRouter = createTRPCRouter({
 				link: z
 					.string()
 					.url({ message: "Must be a valid url. e.g. https://www.linklift.in" }),
+				i: z.string()
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
-			console.log(":::::create:::::")
-			const forwarded = ctx.headers["x-forwarded-for"];
-			const ip = Array.isArray(forwarded) ? forwarded[0] : forwarded || "unknown";
-			const { success } = await publicRatelimit.limit(ip);
+			const { success } = await publicRatelimit.limit(input.i);
 
 			if (!success) {
 				throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many requests, only 2 request per 15 min is allowed. Sign up to remove the limit" });
@@ -29,18 +27,20 @@ export const publicLinkRouter = createTRPCRouter({
 					link: input.link,
 					shortLink: nanoid(6),
 					expirationTime: calculateExpirationTime("5_MIN"),
-					createdByIp: ip,
+					createdByIp: input.i,
 				},
 			});
 		}),
-	getAllMyLinks: publicProcedure.query(({ ctx }) => {
-		const forwarded = ctx.headers["x-forwarded-for"];
-		const ip = Array.isArray(forwarded) ? forwarded[0] : forwarded || "unknown";
+	getAllMyLinks: publicProcedure
+	.input(z.object({
+		i: z.string()
+	}))
+	.query(({ ctx, input }) => {
 		return ctx.db.publicLinks.findMany({
 			where: {
 				AND: [
 					{ expirationTime: { gt: new Date() } },
-					{ createdByIp: ip },
+					{ createdByIp: input.i },
 				],
 			},
 		});
