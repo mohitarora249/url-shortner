@@ -12,12 +12,14 @@ import { DropdownMenu, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuConten
 import useClipboard from "~/hooks/common/use-clipboard"
 import { api } from "~/trpc/react"
 import { toast } from "sonner"
+import { useState } from "react"
 
 const CreateLinkForm = () => {
-  const params = useParams()
-  const orgId = params.orgId as string
-  const { form, onSubmit, isLoading } = useCreateLink({ orgId })
-  const { copyToClipboard } = useClipboard()
+  const params = useParams();
+  const [showPassword, setShowPassword] = useState(false);
+  const orgId = params.orgId as string;
+  const { form, onSubmit, isLoading } = useCreateLink({ orgId });
+  const { copyToClipboard } = useClipboard();
 
   const { mutate: createApiKey, isPending } = api.apiKeyMgmt.create.useMutation({
     onSuccess: async () => {
@@ -44,6 +46,10 @@ const CreateLinkForm = () => {
     copyToClipboard("" + organization.apiKey)
   }
 
+  const createPasswordHdlr = () => {
+    setShowPassword(s => !s);
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: -20 }}
@@ -65,6 +71,18 @@ const CreateLinkForm = () => {
               </FormItem>
             )}
           />
+          {showPassword && <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormControl>
+                  <Input className="rounded-full" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />}
           <FormField
             control={form.control}
             name="expiration"
@@ -100,6 +118,9 @@ const CreateLinkForm = () => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
+          <DropdownMenuItem onClick={createPasswordHdlr} disabled={isPending || !!organization?.apiKey}>
+            Password Protected
+          </DropdownMenuItem>
           <DropdownMenuItem onClick={createApiKeyHdlr} disabled={isPending || !!organization?.apiKey}>
             Create API Key
           </DropdownMenuItem>

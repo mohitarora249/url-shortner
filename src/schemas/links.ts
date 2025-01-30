@@ -14,6 +14,7 @@ export const CreateShortenLink = z.object({
     .url({ message: "Must be a valid url. e.g. https://www.linklift.in" }),
   orgId: z.string(),
   expiration: ExpirationEnum,
+  password: z.string().optional(),
 });
 
 export const CreateShortenLinkViaSDK = z.object({

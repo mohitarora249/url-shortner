@@ -84,6 +84,7 @@ export const linksRouter = createTRPCRouter({
           link: input.link,
           shortLink: nanoid(6),
           expirationTime: calculateExpirationTime(input.expiration),
+          password: input.password ?? null
         },
       });
     }),

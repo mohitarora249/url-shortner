@@ -29,12 +29,13 @@ const useCreateLink = ({ orgId }: { orgId: string }) => {
       link: "",
       orgId: "",
       expiration: "NO_EXP",
+      password: null
     },
   });
 
   const onSubmit = (values: z.infer<typeof CreateShortenLink>) => {
     form.reset();
-    mutate({ link: values.link, orgId, expiration: values.expiration });
+    mutate({ link: values.link, orgId, expiration: values.expiration, password: values.password });
   };
 
   return {
