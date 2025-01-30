@@ -19,7 +19,7 @@ export const publicLinkRouter = createTRPCRouter({
 			const { success } = await publicRatelimit.limit(input.i);
 
 			if (!success) {
-				throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many requests, only 2 request per 15 min is allowed. Sign up to remove the limit" });
+				throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many requests, only 2 requests per 15 min are allowed. Sign up to remove the limit" });
 			}
 
 			return ctx.db.publicLinks.create({
