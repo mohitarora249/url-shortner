@@ -5,9 +5,12 @@ import {
   type NextAuthOptions,
 } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-
+import EmailProvider from "next-auth/providers/email";
 import { env } from "~/env";
 import { db } from "~/server/db";
+import { sendEmail } from "~/lib/email";
+import MagicLink from "~/components/emails/magic-link";
+import { render } from "@react-email/components";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -50,6 +53,28 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
+    }),
+    EmailProvider({
+      server: {
+        host: "smtp.gmail.com",
+        port: 587,
+        auth: {
+          user: env.EMAIL,
+          pass: env.EMAIL_PASSWORD,
+        },
+      },
+      maxAge: 10 * 60, // 10 minutes
+      async sendVerificationRequest({
+        identifier: email,
+        url,
+      }) {
+        await sendEmail({
+          to: email,
+          from: env.EMAIL,
+          subject: "Sign in to LinkLift",
+          html: await render(<MagicLink email={ email } url = { url } />)
+        });
+      },
     }),
   ],
   secret: env.NEXTAUTH_SECRET,

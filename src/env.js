@@ -34,6 +34,8 @@ export const env = createEnv({
     REDIS_TOKEN: z.string(),
     TINY_BIRD_TOKEN: z.string(),
     LINK_PREVIEW: z.string(),
+    EMAIL: z.string(),
+    EMAIL_PASSWORD: z.string(),
   },
 
   /**
@@ -62,6 +64,8 @@ export const env = createEnv({
     REDIS_TOKEN: process.env.REDIS_TOKEN,
     TINY_BIRD_TOKEN: process.env.TINY_BIRD_TOKEN,
     LINK_PREVIEW: process.env.LINK_PREVIEW,
+    EMAIL: process.env.EMAIL,
+    EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
