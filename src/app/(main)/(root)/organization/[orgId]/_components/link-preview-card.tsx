@@ -1,8 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion"
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card"
-import { ExternalLink } from "lucide-react"
+import { Card, CardDescription, CardHeader, CardTitle } from "~/components/ui/card"
 import Image from "next/image"
 import { api } from "~/trpc/react";
 
@@ -15,7 +14,7 @@ export function LinkPreviewCard({ url }: Props) {
 
   return (
     <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden p-0 m-0">
         <CardHeader>
           <CardTitle>{data ? data.title : "Loading..."}</CardTitle>
         </CardHeader>
@@ -29,11 +28,6 @@ export function LinkPreviewCard({ url }: Props) {
             </div>
           )}
         </CardDescription>
-        <CardFooter>
-          <a href={url} target="_blank" rel="noopener noreferrer">
-            <ExternalLink className="h-4 w-4" />
-          </a>
-        </CardFooter>
       </Card>
     </motion.div>
   )

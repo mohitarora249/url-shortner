@@ -112,7 +112,7 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
                   exit={{ opacity: 0, scale: 0.95, y: 10 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <LinkPreviewCard url={url} />
+                  <LinkPreviewCard url={link} />
                 </motion.div>
               )}
             </AnimatePresence>

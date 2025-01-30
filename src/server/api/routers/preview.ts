@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import cheerio from "cheerio"
+import fetch from "node-fetch"
 
 export const previewRouter = createTRPCRouter({
     // https://my.linkpreview.net/
