@@ -26,7 +26,7 @@ type Props = {
 const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
   const { copyToClipboard } = useClipboard();
   const url = `${env.NEXT_PUBLIC_BASE_URL}/${shortLink}`
-  const [isHovering, setIsHovering] = useState(false);
+  // const [isHovering, setIsHovering] = useState(false);
   const [qrCode, setQrCode] = useState<string | null>(null)
   const onExternalLinkClickHandler = () => window.open(url)
   const { links } = api.useUtils()
@@ -95,15 +95,15 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
         <div className="flex-grow justify-between">
           <div className="flex flex-col relative">
             <span
-              onMouseEnter={() => setIsHovering(true)}
-              onMouseLeave={() => setIsHovering(false)}
+              // onMouseEnter={() => setIsHovering(true)}
+              // onMouseLeave={() => setIsHovering(false)}
             >
               <div className="font-bold text-blue-600">
                 {url}
               </div>
               <div className="text-sm text-gray-600">{link}</div>
             </span>
-            <AnimatePresence>
+            {/* <AnimatePresence>
               {isHovering && (
                 <motion.div
                   className="absolute z-10 left-0 mt-2 w-72"
@@ -115,7 +115,7 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
                   <LinkPreviewCard url={link} />
                 </motion.div>
               )}
-            </AnimatePresence>
+            </AnimatePresence> */}
             {expirationTime && linkType === "active" && (
               <Badge className="my-1 w-fit" variant="outline">
                 Expires at : {format(expirationTime, "dd-MM-yyyy HH:mm:ss")}
