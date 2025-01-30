@@ -32,17 +32,17 @@ export const publicLinkRouter = createTRPCRouter({
 			});
 		}),
 	getAllMyLinks: publicProcedure
-	.input(z.object({
-		i: z.string()
-	}))
-	.query(({ ctx, input }) => {
-		return ctx.db.publicLinks.findMany({
-			where: {
-				AND: [
-					{ expirationTime: { gt: new Date() } },
-					{ createdByIp: input.i },
-				],
-			},
-		});
-	}),
+		.input(z.object({
+			i: z.string()
+		}))
+		.query(({ ctx, input }) => {
+			return ctx.db.publicLinks.findMany({
+				where: {
+					AND: [
+						{ expirationTime: { gt: new Date() } },
+						{ createdByIp: input.i },
+					],
+				},
+			});
+		}),
 });

@@ -13,7 +13,7 @@ const ListMyPublicURLs = () => {
     const { data, isFetching } = api.publicLink.getAllMyLinks.useQuery({
         i: new ClientJS().getFingerprint().toString()
     });
-    console.log("data : ", data)
+
     if (isFetching) return null;
     return (
         <motion.div
@@ -31,7 +31,7 @@ const ListMyPublicURLs = () => {
 
 const ListItem = ({ link }: { link: any }) => {
     const [qrCode, setQrCode] = useState<string | null>(null);
-    const url = `${env.NEXT_PUBLIC_BASE_URL}/${link.shortLink}`
+    const url = `${env.NEXT_PUBLIC_BASE_URL}/pub/${link.shortLink}`
     useEffect(() => {
         const generateCode = async () => {
             try {
