@@ -1,31 +1,32 @@
-import { motion } from "framer-motion"
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/ui/card"
-import { ExternalLink } from "lucide-react"
+"use client";
 
-interface LinkPreviewCardProps {
-  url: string
+import { motion } from "framer-motion"
+import { Card } from "~/components/ui/card"
+import Image from "next/image"
+import { api } from "~/trpc/react"
+import { Skeleton } from "~/components/ui/skeleton"
+
+type Props = {
+    url: string
 }
 
-export function LinkPreviewCard({ url }: LinkPreviewCardProps) {
-  return (
-    <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
-      <Card className="overflow-hidden">
-        <CardHeader>
-          <CardTitle>Link Preview</CardTitle>
-        </CardHeader>
-        <CardDescription className="relative h-52 w-full">
-          <iframe 
-            src={url} 
-            className="w-full h-full border-none rounded-lg"
-            sandbox="allow-scripts allow-same-origin"
-          />
-        </CardDescription>
-        <CardFooter>
-          <a href={url} target="_blank" rel="noopener noreferrer">
-            <ExternalLink className="h-4 w-4" />
-          </a>
-        </CardFooter>
-      </Card>
-    </motion.div>
-  )
+export function LinkPreviewCard({ url }: Props) {
+
+    const { data, isFetching } = api.preview.useQuery({ url });
+
+    return (
+        <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }}>
+            <Card className="overflow-hidden w-24 h-24">
+                {isFetching ? <Skeleton className="w-24 h-24 rounded" /> : null}
+                {data && (
+                    <div className="flex gap-3">
+                        {data.image && (
+                            <Image src={data.image} alt="Preview Image" width={60} height={60} className="rounded" />
+                        )}
+                        <p>{data.description}</p>
+                    </div>
+                )}
+            </Card>
+        </motion.div>
+    )
 }

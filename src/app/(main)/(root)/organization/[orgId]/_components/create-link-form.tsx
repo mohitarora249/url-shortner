@@ -118,7 +118,7 @@ const CreateLinkForm = () => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem onClick={createPasswordHdlr} disabled={isPending || !!organization?.apiKey}>
+          <DropdownMenuItem onClick={createPasswordHdlr}>
             Password Protected
           </DropdownMenuItem>
           <DropdownMenuItem onClick={createApiKeyHdlr} disabled={isPending || !!organization?.apiKey}>
