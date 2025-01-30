@@ -94,92 +94,78 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
         </div>
         <div className="flex-grow justify-between">
           <div className="flex flex-col relative">
-            <span
-              // onMouseEnter={() => setIsHovering(true)}
-              // onMouseLeave={() => setIsHovering(false)}
-            >
-              <div className="font-bold text-blue-600">
-                {url}
+            <div className="flex justify-between">
+              <div className="flex flex-col">
+                <div className="font-bold text-blue-600">
+                  {url}
+                </div>
+                <div className="text-sm text-gray-600">{link}</div>
               </div>
-              <div className="text-sm text-gray-600">{link}</div>
-            </span>
-            {/* <AnimatePresence>
-              {isHovering && (
-                <motion.div
-                  className="absolute z-10 left-0 mt-2 w-72"
-                  initial={{ opacity: 0, scale: 0.95, y: 10 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <LinkPreviewCard url={link} />
-                </motion.div>
-              )}
-            </AnimatePresence> */}
+              <div className="flex space-x-2">
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Button onClick={copyLinkHandler} variant="ghost" size="icon" className="rounded-full">
+                      <Copy className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Copy link</p>
+                  </TooltipContent>
+                </Tooltip>
+                {linkType !== "deleted" && linkType !== "expired" && (
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Button onClick={deleteLinkHandler} variant="ghost" size="icon" className="rounded-full">
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Delete link</p>
+                    </TooltipContent>
+                  </Tooltip>
+                )}
+                {linkType === "deleted" && (
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Button onClick={markLinkActiveFromDeletedById} variant="ghost" size="icon" className="rounded-full">
+                        <UndoDot className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                      <p>Activate link</p>
+                    </TooltipContent>
+                  </Tooltip>
+                )}
+                {linkType === "active" && (
+                  <>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Button onClick={onBanLinkClickHandler} variant="ghost" size="icon" className="rounded-full">
+                          <Ban className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Expire link</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Button onClick={onExternalLinkClickHandler} variant="ghost" size="icon" className="rounded-full">
+                          <ExternalLink className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Open link</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </>
+                )}
+              </div>
+            </div>
             {expirationTime && linkType === "active" && (
               <Badge className="my-1 w-fit" variant="outline">
                 Expires at : {format(expirationTime, "dd-MM-yyyy HH:mm:ss")}
               </Badge>
-            )}
-          </div>
-          <div className="flex space-x-2">
-            <Tooltip>
-              <TooltipTrigger>
-                <Button onClick={copyLinkHandler} variant="ghost" size="icon" className="rounded-full">
-                  <Copy className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Copy link</p>
-              </TooltipContent>
-            </Tooltip>
-            {linkType !== "deleted" && linkType !== "expired" && (
-              <Tooltip>
-                <TooltipTrigger>
-                  <Button onClick={deleteLinkHandler} variant="ghost" size="icon" className="rounded-full">
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Delete link</p>
-                </TooltipContent>
-              </Tooltip>
-            )}
-            {linkType === "deleted" && (
-              <Tooltip>
-                <TooltipTrigger>
-                  <Button onClick={markLinkActiveFromDeletedById} variant="ghost" size="icon" className="rounded-full">
-                    <UndoDot className="h-4 w-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">
-                  <p>Activate link</p>
-                </TooltipContent>
-              </Tooltip>
-            )}
-            {linkType === "active" && (
-              <>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <Button onClick={onBanLinkClickHandler} variant="ghost" size="icon" className="rounded-full">
-                      <Ban className="h-4 w-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Expire link</p>
-                  </TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <Button onClick={onExternalLinkClickHandler} variant="ghost" size="icon" className="rounded-full">
-                      <ExternalLink className="h-4 w-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Open link</p>
-                  </TooltipContent>
-                </Tooltip>
-              </>
             )}
           </div>
         </div>
