@@ -53,6 +53,8 @@ const RedirectionPage = async ({ params }: Props) => {
     date: new Date(),
   });
 
+  if (data && data.link && data.password) redirect(`/protected?next=${params.slug}`);
+
   if (data && data.link) redirect(data.link);
 
   return <div className="h-screen" />;
