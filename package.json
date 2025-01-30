@@ -38,7 +38,7 @@
     "@upstash/ratelimit": "^1.0.1",
     "@upstash/redis": "^1.28.4",
     "add": "^2.0.6",
-    "cheerio": "^1.0.0",
+    "cheerio": "1.0.0-rc.12",
     "class-variance-authority": "^0.7.0",
     "clientjs": "^0.2.1",
     "clsx": "^2.1.0",
