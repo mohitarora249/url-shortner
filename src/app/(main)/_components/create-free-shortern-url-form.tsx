@@ -7,13 +7,13 @@ import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import { Form } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import useFingerprint from "~/hooks/use-fingerprint";
 import { api } from "~/trpc/react";
-import { ClientJS } from "clientjs";
 
 
 const CreateFreeShorternURLForm = () => {
     const { publicLink } = api.useUtils();
-
+    const fingerprint = useFingerprint();
     const formSchema = z.object({
         link: z
             .string()
@@ -39,7 +39,7 @@ const CreateFreeShorternURLForm = () => {
 
     const onSubmit = (values: z.infer<typeof formSchema>) => {
         form.reset();
-        mutate({ link: values.link, i: new ClientJS().getFingerprint().toString() });
+        mutate({ link: values.link, i: fingerprint });
     };
 
 

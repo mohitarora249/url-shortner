@@ -7,16 +7,10 @@ import { generateQRCode } from "~/lib/qr-code";
 import { env } from "~/env";
 import { Loader } from "lucide-react";
 import Link from "next/link";
-import { ClientJS } from "clientjs";
+import useFingerprint from "~/hooks/use-fingerprint";
 
 const ListMyPublicURLs = () => {
-    const [fingerprint, setFingerprint] = useState<string | null>(null);
-    useEffect(() => {
-        if (typeof window !== "undefined") {
-            const client = new ClientJS();
-            setFingerprint(client.getFingerprint().toString());
-        }
-    }, []);
+    const fingerprint = useFingerprint();
 
     const { data, isFetching } = api.publicLink.getAllMyLinks.useQuery({
         i: fingerprint
