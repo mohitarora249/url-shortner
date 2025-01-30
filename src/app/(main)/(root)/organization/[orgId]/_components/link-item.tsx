@@ -89,13 +89,15 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
         </div>
         <div className="flex-grow justify-between">
           <div className="flex flex-col relative">
-            <div
-              className="font-bold text-blue-600"
+            <span
               onMouseEnter={() => setIsHovering(true)}
               onMouseLeave={() => setIsHovering(false)}
             >
-              {url}
-            </div>
+              <div className="font-bold text-blue-600">
+                {url}
+              </div>
+              <div className="text-sm text-gray-600">{link}</div>
+            </span>
             <AnimatePresence>
               {isHovering && (
                 <motion.div
@@ -109,7 +111,6 @@ const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
                 </motion.div>
               )}
             </AnimatePresence>
-            <div className="text-sm text-gray-600">{link}</div>
             {expirationTime && linkType === "active" && (
               <Badge className="my-1 w-fit" variant="outline">
                 Expires at : {format(expirationTime, "dd-MM-yyyy HH:mm:ss")}
