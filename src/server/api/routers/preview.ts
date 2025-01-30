@@ -1,14 +1,23 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { env } from "~/env";
+import cheerio from "cheerio"
 
 export const previewRouter = createTRPCRouter({
     // https://my.linkpreview.net/
     preview: protectedProcedure
         .input(z.object({ url: z.string() }))
         .query(async ({ input }) => {
-            const response = await fetch(`https://api.linkpreview.net/?key=${env.LINK_PREVIEW}&q=${encodeURIComponent(input.url)}`)
-            const data = await response.json()
-            return data
+            const response = await fetch(input.url, { headers: { "User-Agent": "Mozilla/5.0" } })
+            const html = await response.text()
+            const $ = cheerio.load(html)
+
+            const getMetaTag = (name: string) =>
+                $(`meta[property='og:${name}']`).attr("content") || $(`meta[name='${name}']`).attr("content") || ""
+
+            return {
+                title: getMetaTag("title") || $("title").text(),
+                description: getMetaTag("description"),
+                image: getMetaTag("image"),
+            };
         })
 })

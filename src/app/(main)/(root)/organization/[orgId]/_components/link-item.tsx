@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import type { Links } from "@prisma/client"
 import { ExternalLink, Trash2, Ban, UndoDot, Copy, Loader } from 'lucide-react'
 import { Badge } from "~/components/ui/badge"
 import { toast } from "sonner"
@@ -16,7 +15,13 @@ import useClipboard from "~/hooks/common/use-clipboard"
 import { generateQRCode } from "~/lib/qr-code"
 import { LinkPreviewCard } from "./link-preview-card"
 
-type Props = Links & { linkType: LinkType }
+type Props = {
+  shortLink: string
+  id: string
+  link: string
+  linkType: LinkType
+  expirationTime: Date | null
+}
 
 const LinkItem = ({ shortLink, id, link, linkType, expirationTime }: Props) => {
   const { copyToClipboard } = useClipboard();
