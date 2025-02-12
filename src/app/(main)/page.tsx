@@ -1,191 +1,295 @@
-'use client'
+"use client"
 
-import Link from "next/link";
-import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
-import { Link2, Clock, BarChart2, Lock, Zap, Globe } from 'lucide-react';
-import RootNav from "./_components/root-nav";
-import GoogleLogin from "~/components/google-login";
-import { motion } from "framer-motion";
-import CreateFreeShorternURLForm from "./_components/create-free-shortern-url-form";
-import ListMyPublicURLs from "./_components/list-my-public-urls";
+import { useEffect } from "react"
+import Link from "next/link"
+import { Link2, Clock, BarChart2, Lock, Zap, Globe, ArrowDown } from "lucide-react"
+import RootNav from "./_components/root-nav"
+import GoogleLogin from "~/components/google-login"
+import { motion, useAnimation, useScroll, useTransform } from "framer-motion"
+import CreateFreeShorternURLForm from "./_components/create-free-shortern-url-form"
+import ListMyPublicURLs from "./_components/list-my-public-urls"
+import { useInView } from "react-intersection-observer"
 
 const LandingPage = () => {
   return (
-    <div className="flex min-h-screen w-full flex-col bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+    <div className="flex min-h-screen w-full flex-col bg-white dark:bg-gray-900 overflow-hidden">
       <RootNav />
       <main className="flex-1">
         <Hero />
         <Features />
-        {/* <Testimonials /> */}
         <CallToAction />
       </main>
       <Footer />
     </div>
-  );
-};
+  )
+}
 
-const Hero = () => (
-  <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
-    <div className="container px-4 md:px-6">
-      <div className="flex flex-col items-center space-y-4 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="space-y-2"
-        >
-          <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
-            Shorten, Share, Succeed
-          </h1>
-          <p className="mx-auto max-w-[700px] text-gray-500 dark:text-gray-400 md:text-xl">
-            Create powerful, customizable short links in seconds. Boost your online presence with LinkLift.
-          </p>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="w-full max-w-sm space-y-2"
-        >
-          <CreateFreeShorternURLForm />
-        </motion.div>
-        <ListMyPublicURLs />
-      </div>
-    </div>
-  </section>
-);
+const Hero = () => {
+  const controls = useAnimation()
+  const { scrollY } = useScroll()
+  const y = useTransform(scrollY, [0, 300], [0, -100])
 
-const Features = () => (
-  <section className="w-full py-12 md:py-24 lg:py-32" id="features">
-    <div className="container px-4 md:px-6">
-      <motion.h2
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="mb-12 text-center text-3xl font-bold tracking-tighter sm:text-5xl"
+  useEffect(() => {
+    controls.start({ opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } })
+  }, [controls])
+
+  return (
+    <section className="w-full py-20 md:py-32 lg:py-48 relative overflow-hidden">
+      <motion.div
+        className="absolute inset-0 z-0"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5 }}
       >
-        Powerful Features
-      </motion.h2>
-      <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-3">
-        {[
-          { icon: Link2, title: "Custom Short Links", description: "Create memorable, branded short links that reflect your identity." },
-          { icon: Clock, title: "Expirable Links", description: "Set expiration dates for your links to control access over time." },
-          { icon: BarChart2, title: "Advanced Analytics", description: "Track clicks, geographic data, and more with our detailed analytics." },
-          { icon: Lock, title: "Secure Links", description: "Protect your links with passwords or require email verification." },
-          { icon: Zap, title: "Fast Redirection", description: "Experience lightning-fast redirects for a seamless user experience." },
-          { icon: Globe, title: "API Access", description: "Integrate our URL shortener into your own applications with our robust API." },
-        ].map((feature, index) => (
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-white dark:from-blue-900 dark:to-gray-900" />
+        <motion.div
+          className="absolute inset-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.5 }}
+          transition={{ duration: 2, delay: 0.5 }}
+        >
+          {[...Array(20)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute rounded-full bg-blue-200 dark:bg-blue-700 opacity-20"
+              style={{
+                width: `${Math.random() * 40 + 10}px`,
+                height: `${Math.random() * 40 + 10}px`,
+                top: `${Math.random() * 100}%`,
+                left: `${Math.random() * 100}%`,
+                animation: `float ${Math.random() * 10 + 5}s infinite ease-in-out`,
+              }}
+            />
+          ))}
+        </motion.div>
+      </motion.div>
+
+      <div className="container px-4 md:px-6 relative z-10">
+        <div className="flex flex-col items-center space-y-8 text-center">
+          <motion.div initial={{ opacity: 0, y: 50 }} animate={controls} className="space-y-4">
+            <motion.h1
+              className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl/none bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-blue-700"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              Shorten, Share, Succeed
+            </motion.h1>
+            <motion.p
+              className="mx-auto max-w-[700px] text-gray-600 dark:text-gray-300 text-lg md:text-xl"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              Create powerful, customizable short links in seconds. Boost your online presence with LinkLift.
+            </motion.p>
+          </motion.div>
           <motion.div
-            key={index}
+            className="w-full max-w-md space-y-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            className="flex flex-col items-center space-y-3 text-center"
+            transition={{ duration: 0.8, delay: 0.6 }}
           >
-            <feature.icon className="h-10 w-10 text-primary" />
-            <h3 className="text-xl font-bold">{feature.title}</h3>
-            <p className="text-gray-500 dark:text-gray-400">{feature.description}</p>
+            <CreateFreeShorternURLForm />
           </motion.div>
-        ))}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+          >
+            <ListMyPublicURLs />
+          </motion.div>
+        </div>
       </div>
-    </div>
-  </section>
-);
 
-// const Testimonials = () => (
-//   <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
-//     <div className="container px-4 md:px-6">
-//       <motion.h2
-//         initial={{ opacity: 0, y: 20 }}
-//         animate={{ opacity: 1, y: 0 }}
-//         transition={{ duration: 0.5 }}
-//         className="mb-12 text-center text-3xl font-bold tracking-tighter sm:text-5xl"
-//       >
-//         What Our Users Say
-//       </motion.h2>
-//       <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
-//         {[
-//           { name: "Alex Johnson", role: "Marketing Manager", quote: "LinkLift has revolutionized our marketing campaigns. The analytics are incredibly insightful!" },
-//           { name: "Sarah Lee", role: "Content Creator", quote: "I love how easy it is to create custom short links. It&apos;s made my content sharing so much more professional." },
-//           { name: "Mike Brown", role: "E-commerce Owner", quote: "The API integration was a game-changer for our online store. Highly recommended!" },
-//         ].map((testimonial, index) => (
-//           <motion.div
-//             key={index}
-//             initial={{ opacity: 0, y: 20 }}
-//             animate={{ opacity: 1, y: 0 }}
-//             transition={{ duration: 0.5, delay: index * 0.1 }}
-//             className="flex flex-col items-center space-y-4 text-center"
-//           >
-//             <div className="h-20 w-20 rounded-full bg-gray-200 dark:bg-gray-700" />
-//             <div>
-//               <h3 className="text-xl font-bold">{testimonial.name}</h3>
-//               <p className="text-sm text-gray-500 dark:text-gray-400">{testimonial.role}</p>
-//             </div>
-//             <p className="text-gray-600 dark:text-gray-300">"{testimonial.quote}"</p>
-//           </motion.div>
-//         ))}
-//       </div>
-//     </div>
-//   </section>
-// );
+      <motion.div
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+        style={{ y }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 1 }}
+      >
+        <ArrowDown className="w-8 h-8 text-blue-500 animate-bounce" />
+      </motion.div>
+    </section>
+  )
+}
 
-const CallToAction = () => (
-  <section className="w-full py-12 md:py-24 lg:py-32" id="contact">
-    <div className="container px-4 md:px-6">
-      <div className="flex flex-col items-center justify-center space-y-4 text-center">
-        <motion.div
+const Features = () => {
+  const controls = useAnimation()
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  })
+
+  useEffect(() => {
+    if (inView) {
+      controls.start("visible")
+    }
+  }, [controls, inView])
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+      },
+    },
+  }
+
+  return (
+    <section className="w-full py-20 md:py-32 bg-gray-50 dark:bg-gray-800" id="features">
+      <div className="container px-4 md:px-6">
+        <motion.h2
+          className="mb-12 text-center text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-gray-900 dark:text-white"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="space-y-2"
+          transition={{ duration: 0.6 }}
         >
-          <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-            Ready to Get Started?
-          </h2>
-          <p className="max-w-[900px] text-gray-500 dark:text-gray-400 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-            Join thousands of satisfied users who have streamlined their link sharing with LinkLift.
-          </p>
-        </motion.div>
+          Powerful Features
+        </motion.h2>
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="w-full max-w-sm space-y-2"
+          ref={ref}
+          variants={containerVariants}
+          initial="hidden"
+          animate={controls}
+          className="grid gap-12 sm:grid-cols-2 lg:grid-cols-3"
         >
-          <GoogleLogin />
-          <p className="text-xs text-gray-500 dark:text-gray-400">
-            Start with our free plan. No credit card required.
-          </p>
+          {[
+            {
+              icon: Link2,
+              title: "Custom Short Links",
+              description: "Create memorable, branded short links that reflect your identity.",
+            },
+            {
+              icon: Clock,
+              title: "Expirable Links",
+              description: "Set expiration dates for your links to control access over time.",
+            },
+            {
+              icon: BarChart2,
+              title: "Advanced Analytics",
+              description: "Track clicks, geographic data, and more with our detailed analytics.",
+            },
+            {
+              icon: Lock,
+              title: "Secure Links",
+              description: "Protect your links with passwords or require email verification.",
+            },
+            {
+              icon: Zap,
+              title: "Fast Redirection",
+              description: "Experience lightning-fast redirects for a seamless user experience.",
+            },
+            {
+              icon: Globe,
+              title: "API Access",
+              description: "Integrate our URL shortener into your own applications with our robust API.",
+            },
+          ].map((feature, index) => (
+            <motion.div
+              key={index}
+              variants={itemVariants}
+              className="flex flex-col items-center space-y-4 text-center group"
+            >
+              <motion.div
+                className="rounded-full bg-blue-100 dark:bg-blue-900 p-3 transition-all duration-300 ease-in-out group-hover:scale-110 group-hover:shadow-lg"
+                whileHover={{ rotate: 360 }}
+                transition={{ duration: 0.5 }}
+              >
+                <feature.icon className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+              </motion.div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white">{feature.title}</h3>
+              <p className="text-gray-600 dark:text-gray-300">{feature.description}</p>
+            </motion.div>
+          ))}
         </motion.div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  )
+}
+
+const CallToAction = () => {
+  const controls = useAnimation()
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  })
+
+  useEffect(() => {
+    if (inView) {
+      controls.start({ opacity: 1, y: 0, transition: { duration: 0.8 } })
+    }
+  }, [controls, inView])
+
+  return (
+    <section className="w-full py-20 md:py-32" id="contact">
+      <div className="container px-4 md:px-6">
+        <motion.div
+          ref={ref}
+          initial={{ opacity: 0, y: 50 }}
+          animate={controls}
+          className="flex flex-col items-center justify-center space-y-8 text-center"
+        >
+          <div className="space-y-4">
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-gray-900 dark:text-white">
+              Ready to Get Started?
+            </h2>
+            <p className="max-w-[600px] text-gray-600 dark:text-gray-300 text-lg">
+              Join thousands of satisfied users who have streamlined their link sharing with LinkLift.
+            </p>
+          </div>
+          <motion.div
+            className="w-full max-w-sm space-y-4"
+            whileHover={{ scale: 1.05 }}
+            transition={{ type: "spring", stiffness: 300 }}
+          >
+            <GoogleLogin />
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Start with our free plan. No credit card required.
+            </p>
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
 
 const Footer = () => (
-  <footer className="w-full py-6 bg-gray-100 dark:bg-gray-800">
+  <footer className="w-full py-8 bg-gray-100 dark:bg-gray-800">
     <div className="container px-4 md:px-6">
-      <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+      <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
         <div className="text-center md:text-left">
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            © 2025 LinkLift. All rights reserved.
-          </p>
+          <p className="text-sm text-gray-600 dark:text-gray-300">© 2025 LinkLift. All rights reserved.</p>
         </div>
-        <nav className="flex gap-4">
-          <Link href="#" className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
-            Terms
-          </Link>
-          <Link href="#" className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
-            Privacy
-          </Link>
-          <Link href="#" className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300">
-            Contact
-          </Link>
+        <nav className="flex gap-6">
+          {["Terms", "Privacy", "Contact"].map((item, index) => (
+            <motion.div key={index} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+              <Link
+                href="#"
+                className="text-sm text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 transition-colors duration-200"
+              >
+                {item}
+              </Link>
+            </motion.div>
+          ))}
         </nav>
       </div>
     </div>
   </footer>
-);
+)
 
-export default LandingPage;
+export default LandingPage
+
