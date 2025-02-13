@@ -46,6 +46,7 @@ const ListMyPublicURLs = () => {
 
 const ListItem = ({ link }: { link: any }) => {
   const [qrCode, setQrCode] = useState<string | null>(null)
+  const [timeRemaining, setTimeRemaining] = useState<string>("")
   const url = `${env.NEXT_PUBLIC_BASE_URL}/pub/${link.shortLink}`
 
   useEffect(() => {
@@ -59,6 +60,30 @@ const ListItem = ({ link }: { link: any }) => {
     }
     generateCode()
   }, [url])
+
+  useEffect(() => {
+    const updateTimeRemaining = () => {
+      const now = new Date().getTime()
+      const expirationTime = new Date(link.expirationTime).getTime()
+      const timeDiff = expirationTime - now
+
+      if (timeDiff <= 0) {
+        setTimeRemaining("Expired")
+      } else {
+        const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24))
+        const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+        const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60))
+        const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000)
+
+        setTimeRemaining(`${days}d ${hours}h ${minutes}m ${seconds}s`)
+      }
+    }
+
+    updateTimeRemaining()
+    const timer = setInterval(updateTimeRemaining, 1000)
+
+    return () => clearInterval(timer)
+  }, [link.expirationTime])
 
   return (
     <motion.div
@@ -84,7 +109,7 @@ const ListItem = ({ link }: { link: any }) => {
             <motion.div
               className="w-12 h-12 flex items-center justify-center bg-gray-100 rounded-md"
               animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
             >
               <Loader className="h-8 w-8 text-gray-500" />
             </motion.div>
@@ -104,10 +129,18 @@ const ListItem = ({ link }: { link: any }) => {
           >
             {link.link}
           </motion.div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="text-start text-xs font-medium text-blue-500"
+          >
+            Expires in: {timeRemaining}
+          </motion.div>
         </div>
       </div>
     </motion.div>
   )
 }
 
-export default ListMyPublicURLs
+export default ListMyPublicURLs;
