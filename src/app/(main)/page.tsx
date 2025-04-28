@@ -5,13 +5,13 @@ import { Link2, Clock, BarChart2, Lock, Zap, Globe, ArrowRight, ShieldCheck } fr
 import { motion, useAnimation, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
 import { Card, CardContent } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
 import { Badge } from "~/components/ui/badge";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import CreateFreeShorternURLForm from "./_components/create-free-shortern-url-form";
 import ListMyPublicURLs from "./_components/list-my-public-urls";
+import { useRouter } from "next/navigation";
 
 const Index = () => {
   return (
@@ -32,6 +32,8 @@ const Index = () => {
 };
 
 const Header = () => {
+  const { push } = useRouter();
+  const { data: session } = useSession();
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -47,11 +49,10 @@ const Header = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
           ? "bg-white/80 backdrop-blur-md shadow-md dark:bg-gray-900/80"
           : "bg-transparent"
-      }`}
+        }`}
     >
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <div className="flex items-center space-x-2">
@@ -73,19 +74,26 @@ const Header = () => {
           ))}
         </nav>
         <div className="flex items-center space-x-4">
-          <Button
-            variant="ghost"
-            className="hidden md:flex hover:text-brand-purple hover:bg-brand-softPurple/30"
-            onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
-          >
-            Log In
-          </Button>
-          <Button
+          {session ? <Button
             className="button-gradient"
-            onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+            onClick={() => push("/dashboard")}
           >
-            Sign Up Free
-          </Button>
+            Dashboard
+          </Button> : <>
+            <Button
+              variant="ghost"
+              className="hidden md:flex hover:text-brand-purple hover:bg-brand-softPurple/30"
+              onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+            >
+              Log In
+            </Button>
+            <Button
+              className="button-gradient"
+              onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+            >
+              Sign Up Free
+            </Button>
+          </>}
         </div>
       </div>
     </motion.header>
@@ -99,14 +107,14 @@ const Hero = () => {
       <div className="absolute inset-0 hero-gradient -z-10"></div>
       <div className="absolute -top-24 -right-24 w-96 h-96 bg-brand-purple/10 rounded-full blur-3xl"></div>
       <div className="absolute top-1/2 -left-48 w-96 h-96 bg-brand-brightBlue/10 rounded-full blur-3xl"></div>
-      
+
       {/* Animated blobs */}
       <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-brand-purple/5 rounded-full animate-blob-move"></div>
       <div className="absolute bottom-1/3 left-1/3 w-72 h-72 bg-brand-brightBlue/5 rounded-full animate-blob-move" style={{ animationDelay: "4s" }}></div>
 
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col items-center space-y-8 text-center">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -115,13 +123,13 @@ const Hero = () => {
             <Badge variant="outline" className="mb-4 px-3 py-1 border-brand-purple text-brand-purple bg-brand-softPurple/30">
               Trusted by 15,000+ users worldwide
             </Badge>
-            
+
             <h1 className="mb-6 text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight">
               Create <span className="text-gradient">powerful links</span> that convert
             </h1>
-            
+
             <p className="mb-8 text-lg md:text-xl text-foreground/80 max-w-2xl mx-auto">
-              Turn long, complex URLs into short, memorable links. Boost your brand 
+              Turn long, complex URLs into short, memorable links. Boost your brand
               with our advanced link shortener packed with analytics and customization.
             </p>
 
@@ -129,8 +137,8 @@ const Hero = () => {
               <CreateFreeShorternURLForm />
             </div>
           </motion.div>
-          
-          <motion.div 
+
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 1 }}
@@ -157,7 +165,7 @@ const Hero = () => {
         >
           <span className="text-xs text-foreground/50 mb-2">Scroll to explore</span>
           <div className="w-6 h-10 rounded-full border-2 border-foreground/20 flex justify-center p-1">
-            <motion.div 
+            <motion.div
               animate={{ y: [0, 12, 0] }}
               transition={{ repeat: Infinity, duration: 1.5 }}
               className="w-1.5 h-1.5 rounded-full bg-brand-purple"
@@ -211,7 +219,7 @@ const Features = () => {
   return (
     <section id="features" className="py-24 relative overflow-hidden" ref={ref}>
       <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-background to-secondary/50 -z-10"></div>
-      
+
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <Badge variant="outline" className="mb-4 px-3 py-1 border-brand-purple text-brand-purple">
@@ -288,7 +296,7 @@ const Testimonials = () => {
     threshold: 0.1,
     triggerOnce: true,
   });
-  
+
   const testimonials = [
     {
       name: "Sarah Johnson",
@@ -309,12 +317,12 @@ const Testimonials = () => {
       testimonial: "The QR code feature and analytics dashboard are game-changers. Our product links are now getting twice as many clicks.",
     }
   ];
-  
+
   return (
     <section className="py-24 relative overflow-hidden" ref={ref}>
       <div className="absolute top-1/2 left-1/4 w-64 h-64 bg-brand-purple/5 rounded-full blur-3xl -z-10"></div>
       <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-brand-brightBlue/5 rounded-full blur-3xl -z-10"></div>
-      
+
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <Badge variant="outline" className="mb-4 px-3 py-1 border-brand-purple text-brand-purple">
@@ -325,7 +333,7 @@ const Testimonials = () => {
             See what our users have to say about their experience with LinkLift.
           </p>
         </div>
-        
+
         <div className="grid gap-8 md:grid-cols-3">
           {testimonials.map((item, index) => (
             <motion.div
@@ -366,7 +374,7 @@ const Pricing = () => {
     threshold: 0.1,
     triggerOnce: true,
   });
-  
+
   const plans = [
     {
       name: "Free",
@@ -411,7 +419,7 @@ const Pricing = () => {
       popular: false,
     }
   ];
-  
+
   return (
     <section id="pricing" className="py-24 bg-secondary/50" ref={ref}>
       <div className="container mx-auto px-4 md:px-6">
@@ -424,7 +432,7 @@ const Pricing = () => {
             Choose the plan that works best for you. All plans include a 14-day free trial.
           </p>
         </div>
-        
+
         <div className="grid gap-8 md:grid-cols-3 max-w-5xl mx-auto">
           {plans.map((plan, index) => (
             <motion.div
@@ -434,23 +442,22 @@ const Pricing = () => {
               transition={{ duration: 0.5, delay: index * 0.2 }}
               className="flex"
             >
-              <Card className={`flex flex-col h-full w-full card-hover ${
-                plan.popular ? "border-brand-purple shadow-glow-light" : ""
-              }`}>
+              <Card className={`flex flex-col h-full w-full card-hover ${plan.popular ? "border-brand-purple shadow-glow-light" : ""
+                }`}>
                 <CardContent className="p-6 flex-1 flex flex-col">
                   {plan.popular && (
                     <Badge className="mb-4 self-start button-gradient">Most Popular</Badge>
                   )}
-                  
+
                   <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
                   <div className="mb-4">
                     <span className="text-4xl font-bold">{plan.price}</span>
                     {plan.period && <span className="text-foreground/60">{plan.period}</span>}
                   </div>
                   <p className="text-sm text-foreground/70 mb-6">{plan.description}</p>
-                  
+
                   <Separator className="my-6" />
-                  
+
                   <ul className="mb-8 space-y-3 flex-1">
                     {plan.features.map((feature, i) => (
                       <li key={i} className="flex items-center">
@@ -463,8 +470,8 @@ const Pricing = () => {
                       </li>
                     ))}
                   </ul>
-                  
-                  <Button 
+
+                  <Button
                     className={`mt-auto ${plan.popular ? "button-gradient" : "bg-secondary hover:bg-secondary/80"}`}
                   >
                     {plan.cta}
@@ -484,9 +491,9 @@ const FAQ = () => {
     threshold: 0.1,
     triggerOnce: true,
   });
-  
+
   const [openItem, setOpenItem] = useState<number | null>(0);
-  
+
   const faqs = [
     {
       question: "How long do shortened links last?",
@@ -509,7 +516,7 @@ const FAQ = () => {
       answer: "Very secure! We use HTTPS for all links and offer additional security features like password protection and email verification for Pro and Enterprise plans."
     }
   ];
-  
+
   return (
     <section id="faq" className="py-24" ref={ref}>
       <div className="container mx-auto px-4 md:px-6">
@@ -522,7 +529,7 @@ const FAQ = () => {
             Everything you need to know about LinkLift.
           </p>
         </div>
-        
+
         <div className="max-w-3xl mx-auto divide-y divide-border">
           {faqs.map((faq, index) => (
             <motion.div
@@ -537,13 +544,11 @@ const FAQ = () => {
                 onClick={() => setOpenItem(openItem === index ? null : index)}
               >
                 <h3 className="text-lg font-medium">{faq.question}</h3>
-                <div className={`ml-2 flex-shrink-0 h-5 w-5 rounded-full border border-brand-purple flex items-center justify-center transition-transform duration-200 ${
-                  openItem === index ? "rotate-45" : ""
-                }`}>
+                <div className={`ml-2 flex-shrink-0 h-5 w-5 rounded-full border border-brand-purple flex items-center justify-center transition-transform duration-200 ${openItem === index ? "rotate-45" : ""
+                  }`}>
                   <span className="block h-0.5 w-3 bg-brand-purple absolute"></span>
-                  <span className={`block h-3 w-0.5 bg-brand-purple absolute transition-opacity duration-200 ${
-                    openItem === index ? "opacity-0" : ""
-                  }`}></span>
+                  <span className={`block h-3 w-0.5 bg-brand-purple absolute transition-opacity duration-200 ${openItem === index ? "opacity-0" : ""
+                    }`}></span>
                 </div>
               </button>
               <AnimatePresence>
@@ -572,7 +577,7 @@ const CTA = () => {
     <section className="py-20 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-brand-purple/10 to-brand-brightBlue/10 -z-10"></div>
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-purple/20 to-transparent"></div>
-      
+
       <div className="container mx-auto px-4 md:px-6">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
@@ -588,7 +593,7 @@ const CTA = () => {
               Join thousands of marketers, content creators, and businesses who trust LinkLift
               to power their link optimization strategy.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
               <Button size="lg" className="button-gradient px-8 py-6 text-lg">
                 Get Started Free
@@ -633,7 +638,7 @@ const Footer = () => {
               ))}
             </div>
           </div>
-          
+
           <div>
             <h3 className="font-semibold mb-4">Product</h3>
             <ul className="space-y-2">
@@ -646,7 +651,7 @@ const Footer = () => {
               ))}
             </ul>
           </div>
-          
+
           <div>
             <h3 className="font-semibold mb-4">Company</h3>
             <ul className="space-y-2">
@@ -659,11 +664,11 @@ const Footer = () => {
               ))}
             </ul>
           </div>
-          
+
           <div>
             <h3 className="font-semibold mb-4">Legal</h3>
             <ul className="space-y-2">
-              {["Terms", "Privacy", "Cookies", "Licenses", "Settings"].map((item, i) => (
+              {["Terms", "Privacy", "Cookies"].map((item, i) => (
                 <li key={i}>
                   <a href="#" className="text-foreground/70 hover:text-brand-purple transition-colors">
                     {item}
@@ -673,7 +678,7 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-        
+
         <div className="mt-16 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-foreground/60">
             © 2025 LinkLift. All rights reserved.

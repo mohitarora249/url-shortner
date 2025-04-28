@@ -35,8 +35,8 @@ function MainNav({
     >
       <Link href="/" className="cursor-pointer">
         <div className="text-lg font-extrabold tracking-wide">
-          <span>Link</span>
-          <span className="text-blue-500">Lift</span>
+        <span>Link</span>
+        <span className="text-brand-purple">Lift</span>
         </div>
       </Link>
     </nav>
