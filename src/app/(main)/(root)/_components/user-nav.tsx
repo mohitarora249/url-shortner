@@ -49,8 +49,8 @@ const UserNav = () => {
             </p>
           </div>
         </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        {/* <DropdownMenuGroup>
+        {/* <DropdownMenuSeparator />
+        <DropdownMenuGroup>
           <DropdownMenuItem onClick={redirectToProfilePageHandler}>
             Profile
             <DropdownMenuShortcut>⌘P</DropdownMenuShortcut>

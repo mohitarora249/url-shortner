@@ -14,8 +14,8 @@ const TopNav = () => {
         <div className="flex h-16 max-w-full items-center px-4 md:mx-auto md:max-w-screen-lg">
           <Link href="/dashboard" className="mx-2 cursor-pointer md:mx-6">
             <div className="text-lg font-extrabold tracking-wide">
-              <span>Link</span>
-              <span className="text-blue-500">Lift</span>
+            <span>Link</span>
+            <span className="text-brand-purple">Lift</span>
             </div>
           </Link>
           {!pathname.includes("dashboard") && <OrganizationSwitcher />}
