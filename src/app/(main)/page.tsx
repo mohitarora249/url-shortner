@@ -76,7 +76,7 @@ const Header = () => {
         <div className="flex items-center space-x-4">
           {session ? <Button
             className="button-gradient"
-            onClick={() => push("/dashboard")}
+            onClick={() => void push("/dashboard")}
           >
             Dashboard
           </Button> : <>

@@ -24,7 +24,7 @@ const Organization = () => {
         >
           <CreateLinkForm />
         </motion.div>
-        <Tabs defaultValue="overview" className="w-full space-y-8">
+        <Tabs defaultValue="active-links" className="w-full space-y-8">
           <TabsList className="w-full bg-gray-100 p-1 rounded-lg">
             {ORGANIZATION_PAGE_TABS.map((tab, index) => (
               <motion.div
