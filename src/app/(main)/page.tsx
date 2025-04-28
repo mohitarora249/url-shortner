@@ -32,7 +32,7 @@ const Index = () => {
 };
 
 const Header = () => {
-  const { push } = useRouter();
+  const router = useRouter();
   const { data: session } = useSession();
   const [scrolled, setScrolled] = useState(false);
 
@@ -76,7 +76,7 @@ const Header = () => {
         <div className="flex items-center space-x-4">
           {session ? <Button
             className="button-gradient"
-            onClick={() => void push("/dashboard")}
+            onClick={() => router.push("/dashboard")}
           >
             Dashboard
           </Button> : <>
