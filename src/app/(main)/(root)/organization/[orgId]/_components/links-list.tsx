@@ -1,3 +1,4 @@
+
 "use client"
 
 import { motion, AnimatePresence } from "framer-motion"
@@ -26,7 +27,7 @@ const LinksList = ({ linkType = "active" }: Props) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      className="h-full"
+      className="h-full w-full max-w-4xl mx-auto px-4 py-6 space-y-4"
     >
       {isFetching && !isFetched && <LinkListSkeleton />}
       {data?.length === 0 && (
@@ -34,16 +35,19 @@ const LinksList = ({ linkType = "active" }: Props) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mt-4 flex justify-center text-gray-500"
+          className="flex flex-col items-center justify-center space-y-4 p-8 bg-gray-50 rounded-lg border border-gray-100"
         >
-          No links available
+          <p className="text-lg font-medium text-gray-500">No links available</p>
+          <p className="text-sm text-gray-400">Create your first shortened link above</p>
         </motion.div>
       )}
       {isFetched && data && (
-        <AnimatePresence>
-          {data.map((item) => (
-            <LinkItem key={item.id} linkType={linkType} {...item} />
-          ))}
+        <AnimatePresence mode="popLayout">
+          <div className="space-y-4">
+            {data.map((item) => (
+              <LinkItem key={item.id} linkType={linkType} {...item} />
+            ))}
+          </div>
         </AnimatePresence>
       )}
     </motion.div>
