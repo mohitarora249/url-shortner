@@ -341,7 +341,7 @@ const Testimonials = () => {
                       <span key={i} className="text-yellow-400 mr-1">★</span>
                     ))}
                   </div>
-                  <p className="mb-6 text-foreground/80 italic">"{item.testimonial}"</p>
+                  <p className="mb-6 text-foreground/80 italic">&quot;{item.testimonial}&quot;</p>
                   <div className="flex items-center">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-brand-purple to-brand-brightBlue flex items-center justify-center text-white font-bold">
                       {item.name.charAt(0)}
