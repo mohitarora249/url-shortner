@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion"
 import { Skeleton } from "~/components/ui/skeleton"
 
@@ -13,7 +14,7 @@ const OrganizationListSkeleton = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: idx * 0.1 }}
           >
-            <Skeleton className="h-20 w-full rounded-lg" />
+            <Skeleton className="h-24 w-full rounded-lg" />
           </motion.div>
         ))}
     </div>
@@ -21,4 +22,3 @@ const OrganizationListSkeleton = () => {
 }
 
 export default OrganizationListSkeleton
-

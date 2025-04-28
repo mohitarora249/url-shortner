@@ -17,7 +17,7 @@ const Providers = ({ children, session }: Props) => {
       <TooltipProvider>
         <Toaster />
         {children}
-        <ProgressBar height="4px" options={{ showSpinner: false }} />
+        <ProgressBar color="bg-brand-purple" height="4px" options={{ showSpinner: false }} />
       </TooltipProvider>
     </SessionProvider>
   );
